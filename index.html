@@ -755,7 +755,7 @@ new Chart(document.getElementById("chartFunnel"), {
       const s = funnelData[els[0].index];
       setTableSubset(namesWhere(s.filter), `${s.label} — ${s.desc}`);
     },
-    layout: { padding: { top: 28, right: 12, bottom: 8, left: 12 } },
+    layout: { padding: { top: 36, right: 12, bottom: 8, left: 12 } },
     scales: {
       x: {
         grid: { display: false },
@@ -763,26 +763,34 @@ new Chart(document.getElementById("chartFunnel"), {
       },
       y: {
         beginAtZero: true,
-        grace: "8%",
-        ticks: { precision: 0, font: { size: 11 }, stepSize: 5 },
+        max: Math.max(...funnelData.map(s => s.count)) + 1,
+        ticks: { precision: 0, font: { size: 11 } },
         grid: { color: "#E5E7EB" }
       }
     },
+    interaction: { mode: "index", intersect: false },
     plugins: {
       legend: { display: false },
       datalabels: {
-        anchor: "end", align: "end", offset: 4,
-        color: "#1F2937", font: { weight: "700", size: 14 },
+        display: true,
+        anchor: "end", align: "end", offset: 6,
+        color: "#1F2937", font: { weight: "700", size: 16 },
         formatter: (v) => v > 0 ? v : ""
       },
       tooltip: {
+        enabled: true,
+        backgroundColor: "rgba(31, 56, 100, 0.95)",
+        titleFont: { weight: "700", size: 13 },
+        bodyFont: { size: 12 },
+        padding: 12,
         callbacks: {
           title: (ctx) => funnelData[ctx[0].dataIndex].label,
           label: (ctx) => {
             const s = funnelData[ctx.dataIndex];
             const pct = ((s.count / total) * 100).toFixed(1);
-            return `${s.count} (${pct}% da lista) — ${s.desc}`;
-          }
+            return `${s.count} parlamentares · ${pct}% da lista`;
+          },
+          afterLabel: (ctx) => funnelData[ctx.dataIndex].desc
         }
       }
     }
