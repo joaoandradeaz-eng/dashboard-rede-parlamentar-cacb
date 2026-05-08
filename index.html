@@ -11,9 +11,9 @@
     --primary: #365F91;
     --primary-dark: #1F3864;
     --secondary: #4F81BD;
-    --aderido: #3B82F6;
-    --quente: #FBBF24;
-    --agendado: #CA8A04;
+    --aderido: #2563EB;
+    --quente: #EAB308;
+    --agendado: #B45309;
     --aberto: #57534E;
     --bg: #F5F6F8;
     --card: #FFFFFF;
@@ -654,7 +654,7 @@ const DATA = [
 
 const UF_NOMES = {AC:"Acre",AL:"Alagoas",AM:"Amazonas",AP:"Amapá",BA:"Bahia",CE:"Ceará",DF:"Distrito Federal",ES:"Espírito Santo",GO:"Goiás",MA:"Maranhão",MG:"Minas Gerais",MS:"Mato Grosso do Sul",MT:"Mato Grosso",PA:"Pará",PB:"Paraíba",PE:"Pernambuco",PI:"Piauí",PR:"Paraná",RJ:"Rio de Janeiro",RN:"Rio Grande do Norte",RO:"Rondônia",RR:"Roraima",RS:"Rio Grande do Sul",SC:"Santa Catarina",SE:"Sergipe",SP:"São Paulo",TO:"Tocantins"};
 
-const COR = {Aderido:"#3B82F6", Quente:"#FBBF24", Agendado:"#CA8A04", Aberto:"#57534E"};
+const COR = {Aderido:"#2563EB", Quente:"#EAB308", Agendado:"#B45309", Aberto:"#57534E"};
 const COR_STATUS = {
   "Rodando":                       "#10B981",
   "Tentando Gravação":             "#1E40AF",
@@ -1177,8 +1177,9 @@ new Chart(document.getElementById("chartRankingUFAderidos"), {
       const uf = ufRankingAderidos[els[0].index][0];
       setTableSubset(namesWhere(d => d.situacao === "Aderido" && d.uf === uf), `Aderidos em ${UF_NOMES[uf]}`);
     },
+    layout: { padding: { right: 32 } },
     scales: {
-      x: { beginAtZero: true, ticks: { precision: 0, font: { size: 10 } }, grid: { color: "#E5E7EB" } },
+      x: { beginAtZero: true, grace: "15%", ticks: { precision: 0, font: { size: 10 } }, grid: { color: "#E5E7EB" } },
       y: { ticks: { font: { size: 11 }, autoSkip: false }, grid: { display: false } }
     },
     plugins: {
@@ -1228,8 +1229,9 @@ new Chart(document.getElementById("chartRankingUFConversao"), {
       const x = ufConversao[els[0].index];
       setTableSubset(namesWhere(d => d.uf === x.uf), `Lista em ${UF_NOMES[x.uf]} (${x.aderidos}/${x.total})`);
     },
+    layout: { padding: { right: 40 } },
     scales: {
-      x: { beginAtZero: true, max: 100, ticks: { precision: 0, font: { size: 10 }, callback: v => v + "%" }, grid: { color: "#E5E7EB" } },
+      x: { beginAtZero: true, max: 115, ticks: { precision: 0, font: { size: 10 }, callback: v => v <= 100 ? v + "%" : "" }, grid: { color: "#E5E7EB" } },
       y: { ticks: { font: { size: 11 }, autoSkip: false }, grid: { display: false } }
     },
     plugins: {
