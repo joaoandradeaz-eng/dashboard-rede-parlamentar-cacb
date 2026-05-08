@@ -409,7 +409,7 @@
   <!-- Funil -->
   <section class="chart-card">
     <h3>Funil de conversão</h3>
-    <div class="funnel-svg-wrap" id="funnel"></div>
+    <div class="chart-wrap" style="height: 380px;"><canvas id="chartFunnel"></canvas></div>
   </section>
 
   <h2 class="section-title">Aderidos — Detalhamento</h2>
@@ -719,71 +719,76 @@ function namesWhere(predicate) {
   return DATA.filter(predicate).map(d => d.nome);
 }
 
-// ============== FUNIL SVG (6 estágios, clicável) ==============
+// ============== FUNIL — gráfico de coluna (clicável) ==============
 const funilCount = countBy(DATA, "situacao");
 const aderidosGravaramN = aderidos.filter(d => d.gravacao === "Sim").length;
 const veiculadosN = DATA.filter(d => d.veiculados > 0).length;
 
 const funnelData = [
-  { key:"Aberto",     label:"ABERTO",     desc:"Prospecção fria",                count: funilCount.Aberto || 0,    color:["#A8A29E","#3F3935"], filter: d => d.situacao === "Aberto"   },
-  { key:"Quente",     label:"QUENTE",     desc:"Prospecção quente",              count: funilCount.Quente || 0,    color:["#FBBF24","#A16207"], filter: d => d.situacao === "Quente"   },
-  { key:"Agendado",   label:"AGENDADO",   desc:"Reunião confirmada na agenda",   count: funilCount.Agendado || 0,  color:["#CA8A04","#713F12"], filter: d => d.situacao === "Agendado" },
-  { key:"Aderido",    label:"ADERIDOS",   desc:"Compromisso firmado",            count: funilCount.Aderido || 0,   color:["#3B82F6","#1E3A8A"], filter: d => d.situacao === "Aderido"  },
-  { key:"Gravacao",   label:"GRAVAÇÃO",   desc:"Aderidos que já gravaram",       count: aderidosGravaramN,         color:["#10B981","#047857"], filter: d => d.situacao === "Aderido" && d.gravacao === "Sim" },
-  { key:"Veiculados", label:"VEICULADOS", desc:"Material já veiculado",          count: veiculadosN,               color:["#059669","#022C22"], filter: d => d.veiculados > 0 }
+  { key:"Aberto",     label:"ABERTO",     desc:"Prospecção fria",                count: funilCount.Aberto || 0,    color:"#57534E", filter: d => d.situacao === "Aberto"   },
+  { key:"Quente",     label:"QUENTE",     desc:"Prospecção quente",              count: funilCount.Quente || 0,    color:"#EAB308", filter: d => d.situacao === "Quente"   },
+  { key:"Agendado",   label:"AGENDADO",   desc:"Reunião confirmada na agenda",   count: funilCount.Agendado || 0,  color:"#B45309", filter: d => d.situacao === "Agendado" },
+  { key:"Aderido",    label:"ADERIDOS",   desc:"Compromisso firmado",            count: funilCount.Aderido || 0,   color:"#2563EB", filter: d => d.situacao === "Aderido"  },
+  { key:"Gravacao",   label:"GRAVAÇÃO",   desc:"Aderidos que já gravaram",       count: aderidosGravaramN,         color:"#10B981", filter: d => d.situacao === "Aderido" && d.gravacao === "Sim" },
+  { key:"Veiculados", label:"VEICULADOS", desc:"Material já veiculado",          count: veiculadosN,               color:"#047857", filter: d => d.veiculados > 0 }
 ];
 
-(function renderFunnel() {
-  const VB_W = 1000, VB_H = 700;
-  const stageH = 110;
-  const startY = 14;
-  const insetStep = 60;
-
-  let defs = "";
-  let bands = "";
-  funnelData.forEach((s, i) => {
-    const yTop = startY + i * stageH;
-    const yBot = yTop + stageH;
-    const insetTop = 30 + i * insetStep;
-    const insetBot = 30 + (i+1) * insetStep;
-    const xTopL = insetTop, xTopR = VB_W - insetTop;
-    const xBotL = insetBot, xBotR = VB_W - insetBot;
-
-    defs += `
-      <linearGradient id="g-${s.key}" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="${s.color[0]}"/>
-        <stop offset="100%" stop-color="${s.color[1]}"/>
-      </linearGradient>`;
-
-    const pct = ((s.count / total) * 100).toFixed(0);
-    bands += `
-      <g class="funnel-band" data-idx="${i}">
-        <polygon points="${xTopL},${yTop} ${xTopR},${yTop} ${xBotR},${yBot} ${xBotL},${yBot}"
-                 fill="url(#g-${s.key})"/>
-        <text x="${VB_W/2}" y="${yTop + 32}" text-anchor="middle" fill="#fff"
-              font-size="13" font-weight="700" letter-spacing="3">${s.label}</text>
-        <text x="${VB_W/2}" y="${yTop + 66}" text-anchor="middle" fill="#fff"
-              font-size="26" font-weight="700">${s.count} <tspan font-size="14" font-weight="500" opacity="0.85">· ${pct}%</tspan></text>
-        <text x="${VB_W/2}" y="${yTop + 92}" text-anchor="middle" fill="rgba(255,255,255,0.92)"
-              font-size="11" font-style="italic">${s.desc}</text>
-      </g>`;
-  });
-
-  document.getElementById("funnel").innerHTML = `
-    <svg viewBox="0 0 ${VB_W} ${VB_H}" preserveAspectRatio="xMidYMid meet">
-      <defs>${defs}</defs>
-      ${bands}
-    </svg>`;
-
-  document.querySelectorAll(".funnel-band").forEach(band => {
-    band.style.cursor = "pointer";
-    band.addEventListener("click", () => {
-      const i = parseInt(band.dataset.idx);
-      const s = funnelData[i];
+new Chart(document.getElementById("chartFunnel"), {
+  type: "bar",
+  data: {
+    labels: funnelData.map(s => [s.label, s.desc]),
+    datasets: [{
+      data: funnelData.map(s => s.count),
+      backgroundColor: funnelData.map(s => s.color),
+      borderRadius: 6,
+      barPercentage: 0.75,
+      categoryPercentage: 0.88
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    onHover: (e, els) => { e.native.target.style.cursor = els.length ? "pointer" : "default"; },
+    onClick: (e, els) => {
+      if (!els.length) return;
+      const s = funnelData[els[0].index];
       setTableSubset(namesWhere(s.filter), `${s.label} — ${s.desc}`);
-    });
-  });
-})();
+    },
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: {
+          font: { size: 12, weight: "700" },
+          color: (ctx) => ctx.tick && ctx.index !== undefined ? funnelData[ctx.index].color : "#1F2937",
+          autoSkip: false
+        }
+      },
+      y: {
+        beginAtZero: true,
+        ticks: { precision: 0, font: { size: 11 } },
+        grid: { color: "#E5E7EB" }
+      }
+    },
+    plugins: {
+      legend: { display: false },
+      datalabels: {
+        anchor: "end", align: "end", offset: 4,
+        color: "#1F2937", font: { weight: "700", size: 14 },
+        formatter: (v) => v
+      },
+      tooltip: {
+        callbacks: {
+          title: (ctx) => funnelData[ctx[0].dataIndex].label,
+          label: (ctx) => {
+            const s = funnelData[ctx.dataIndex];
+            const pct = ((s.count / total) * 100).toFixed(1);
+            return `${s.count} (${pct}% da lista) — ${s.desc}`;
+          }
+        }
+      }
+    }
+  }
+});
 
 // ============== KPIs CLICÁVEIS ==============
 document.getElementById("kpiTotal").addEventListener("click", () =>
