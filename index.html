@@ -15,7 +15,7 @@
     --aderido: #3B82F6;
     --quente: #FBBF24;
     --agendado: #CA8A04;
-    --aberto: #A8A29E;
+    --aberto: #57534E;
     --bg: #F5F6F8;
     --card: #FFFFFF;
     --text: #1F2937;
@@ -380,7 +380,7 @@
 
   <header>
     <h1>Rede Parlamentar CACB</h1>
-    <div class="subtitle">Dashboard de acompanhamento — atualizado em 08/05/2026</div>
+    <div class="subtitle">Dashboard de acompanhamento — Atualizado em 08/05/2026</div>
     <hr class="header-divider">
   </header>
 
@@ -651,7 +651,7 @@ const DATA = [
 
 const UF_NOMES = {AC:"Acre",AL:"Alagoas",AM:"Amazonas",AP:"Amapá",BA:"Bahia",CE:"Ceará",DF:"Distrito Federal",ES:"Espírito Santo",GO:"Goiás",MA:"Maranhão",MG:"Minas Gerais",MS:"Mato Grosso do Sul",MT:"Mato Grosso",PA:"Pará",PB:"Paraíba",PE:"Pernambuco",PI:"Piauí",PR:"Paraná",RJ:"Rio de Janeiro",RN:"Rio Grande do Norte",RO:"Rondônia",RR:"Roraima",RS:"Rio Grande do Sul",SC:"Santa Catarina",SE:"Sergipe",SP:"São Paulo",TO:"Tocantins"};
 
-const COR = {Aderido:"#3B82F6", Quente:"#FBBF24", Agendado:"#CA8A04", Aberto:"#A8A29E"};
+const COR = {Aderido:"#3B82F6", Quente:"#FBBF24", Agendado:"#CA8A04", Aberto:"#57534E"};
 const COR_STATUS = {
   "Rodando":                       "#10B981",
   "Tentando Gravação":             "#1E40AF",
@@ -721,7 +721,7 @@ const aderidosGravaramN = aderidos.filter(d => d.gravacao === "Sim").length;
 const veiculadosN = DATA.filter(d => d.veiculados > 0).length;
 
 const funnelData = [
-  { key:"Aberto",     label:"ABERTO",     desc:"Prospecção fria",                count: funilCount.Aberto || 0,    color:["#A8A29E","#57534E"], filter: d => d.situacao === "Aberto"   },
+  { key:"Aberto",     label:"ABERTO",     desc:"Prospecção fria",                count: funilCount.Aberto || 0,    color:["#A8A29E","#3F3935"], filter: d => d.situacao === "Aberto"   },
   { key:"Quente",     label:"QUENTE",     desc:"Prospecção quente",              count: funilCount.Quente || 0,    color:["#FBBF24","#A16207"], filter: d => d.situacao === "Quente"   },
   { key:"Agendado",   label:"AGENDADO",   desc:"Reunião confirmada na agenda",   count: funilCount.Agendado || 0,  color:["#CA8A04","#713F12"], filter: d => d.situacao === "Agendado" },
   { key:"Aderido",    label:"ADERIDOS",   desc:"Compromisso firmado",            count: funilCount.Aderido || 0,   color:["#3B82F6","#1E3A8A"], filter: d => d.situacao === "Aderido"  },
