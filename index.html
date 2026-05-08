@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rede Parlamentar CACB — Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <style>
   :root {
@@ -98,12 +99,28 @@
   .kpi-card .meta strong { color: #000; font-weight: 600; }
 
   .section-title {
-    font-size: 18px;
+    font-size: 22px;
     font-weight: 700;
-    color: var(--primary-dark);
-    margin: 24px 0 16px 0;
-    padding-bottom: 8px;
-    border-bottom: 2px solid var(--border);
+    color: white;
+    margin: 40px 0 24px 0;
+    padding: 18px 28px;
+    background: linear-gradient(90deg, #1F3864 0%, #365F91 100%);
+    border-radius: 10px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    box-shadow: 0 2px 12px rgba(31, 56, 100, 0.18);
+    border-left: 5px solid #FFC857;
+  }
+  .section-title.section-geo {
+    background: linear-gradient(90deg, #2E5E91 0%, #5B89BF 100%);
+    border-left-color: #94C5F8;
+  }
+  .aderidos-block {
+    background: linear-gradient(180deg, #F1F5FA 0%, #F8FAFC 100%);
+    padding: 6px 24px 32px 24px;
+    border-radius: 12px;
+    margin-top: 28px;
+    border: 1px solid #E2E8F0;
   }
 
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
@@ -111,18 +128,22 @@
 
   .chart-card {
     background: var(--card);
-    padding: 20px;
+    padding: 22px 24px;
     border-radius: 12px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 6px rgba(15,23,42,0.06);
+    border: 1px solid #E2E8F0;
   }
   .chart-card h3 {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #1F3864;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #E5E7EB;
+    letter-spacing: 0.2px;
   }
-  .chart-card .chart-wrap { position: relative; height: 240px; }
-  .chart-card.tall .chart-wrap { height: 320px; }
+  .chart-card .chart-wrap { position: relative; height: 280px; }
+  .chart-card.tall .chart-wrap { height: 440px; }
 
   /* Progress bars */
   .progress-block {
@@ -168,32 +189,69 @@
   .progress-label .percent { font-weight: 700; font-size: 28px; color: #000; line-height: 1; }
   .progress-label .frac { color: var(--text-muted); }
 
-  /* Funil */
-  .funnel { display: flex; flex-direction: column; gap: 6px; }
-  .funnel-row {
-    display: grid;
-    grid-template-columns: 110px 1fr 80px;
+  /* Funil moderno */
+  .funnel-modern {
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 12px;
-    font-size: 13px;
-    cursor: pointer;
-    padding: 4px 6px;
-    border-radius: 6px;
-    transition: background 0.15s;
+    gap: 14px;
+    padding: 28px 20px 12px 20px;
   }
-  .funnel-row:hover { background: var(--bg); }
-  .funnel-bar {
-    height: 26px;
-    border-radius: 4px;
+  .funnel-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+  .funnel-shape {
+    height: 86px;
     display: flex;
     align-items: center;
-    padding: 0 10px;
+    justify-content: space-between;
+    padding: 0 56px;
     color: white;
-    font-weight: 600;
-    font-size: 12px;
-    min-width: 30px;
+    cursor: pointer;
+    transition: filter 0.15s, transform 0.15s;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.10);
   }
-  .funnel-count { font-weight: 700; text-align: right; }
+  .funnel-shape:hover { filter: brightness(1.08); transform: scale(1.005); }
+  .funnel-shape .stage-name {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+  }
+  .funnel-shape .stage-stats { display: flex; align-items: baseline; gap: 12px; }
+  .funnel-shape .stage-count { font-size: 38px; font-weight: 700; line-height: 1; }
+  .funnel-shape .stage-pct { font-size: 16px; opacity: 0.92; font-weight: 500; }
+  .funnel-row[data-stage="Aberto"] .funnel-shape {
+    background: linear-gradient(135deg, #94A3B8 0%, #475569 100%);
+    width: 96%;
+    clip-path: polygon(0% 0%, 100% 0%, 96% 100%, 4% 100%);
+  }
+  .funnel-row[data-stage="Quente"] .funnel-shape {
+    background: linear-gradient(135deg, #F59E0B 0%, #B45309 100%);
+    width: 80%;
+    clip-path: polygon(4% 0%, 96% 0%, 91% 100%, 9% 100%);
+  }
+  .funnel-row[data-stage="Agendado"] .funnel-shape {
+    background: linear-gradient(135deg, #4F81BD 0%, #1E3A8A 100%);
+    width: 64%;
+    clip-path: polygon(9% 0%, 91% 0%, 86% 100%, 14% 100%);
+  }
+  .funnel-row[data-stage="Aderido"] .funnel-shape {
+    background: linear-gradient(135deg, #10B981 0%, #064E3B 100%);
+    width: 50%;
+    clip-path: polygon(14% 0%, 86% 0%, 81% 100%, 19% 100%);
+  }
+  .funnel-desc {
+    margin-top: 8px;
+    color: var(--text-muted);
+    font-size: 13px;
+    text-align: center;
+    font-style: italic;
+    max-width: 80%;
+  }
 
   /* Map */
   .map-card { padding: 20px; }
@@ -385,21 +443,28 @@
   <!-- Funil -->
   <section class="chart-card">
     <h3>Funil de situação</h3>
-    <div class="funnel" id="funnel"></div>
+    <div class="funnel-modern" id="funnel"></div>
   </section>
 
   <h2 class="section-title">Aderidos — Detalhamento</h2>
 
+  <div class="aderidos-block">
   <!-- Gravação / Veiculação -->
   <section class="grid-2">
     <div class="chart-card">
-      <h3>Já gravou?</h3>
+      <h3>De quem está aderido, quantos gravaram?</h3>
       <div class="progress-block" id="progressGravou"></div>
     </div>
     <div class="chart-card">
-      <h3>Já veiculamos?</h3>
+      <h3>De quem já gravou, quantos já veiculamos?</h3>
       <div class="progress-block" id="progressVeiculou"></div>
     </div>
+  </section>
+
+  <!-- Ranking Parlamentares (movido pra cá) -->
+  <section class="chart-card" style="margin-top: 16px;">
+    <h3>Parlamentares com mais peças veiculadas</h3>
+    <div class="chart-wrap" style="height: 540px;"><canvas id="chartRankingParlamentares"></canvas></div>
   </section>
 
   <!-- Pipeline -->
@@ -424,23 +489,19 @@
     </div>
   </section>
 
-  <h2 class="section-title">Rankings de engajamento</h2>
+  </div><!-- /aderidos-block -->
 
-  <!-- Ranking Parlamentares -->
-  <section class="chart-card">
-    <h3>Parlamentares com mais peças veiculadas</h3>
-    <div class="chart-wrap" style="height: 520px;"><canvas id="chartRankingParlamentares"></canvas></div>
-  </section>
+  <h2 class="section-title section-geo">Distribuição geográfica</h2>
 
   <!-- Ranking Estados -->
-  <section class="grid-2" style="margin-top: 16px;">
+  <section class="grid-2">
     <div class="chart-card">
       <h3>Top estados — número de aderidos</h3>
-      <div class="chart-wrap" style="height: 360px;"><canvas id="chartRankingUFAderidos"></canvas></div>
+      <div class="chart-wrap" style="height: 380px;"><canvas id="chartRankingUFAderidos"></canvas></div>
     </div>
     <div class="chart-card">
       <h3>Top estados — taxa de conversão (aderidos / lista)</h3>
-      <div class="chart-wrap" style="height: 360px;"><canvas id="chartRankingUFConversao"></canvas></div>
+      <div class="chart-wrap" style="height: 380px;"><canvas id="chartRankingUFConversao"></canvas></div>
     </div>
   </section>
 
@@ -508,9 +569,9 @@
 <script>
 // ============== DADOS ==============
 const DATA = [
-  {nome:"Adriana Ventura",mf:"F",cargo:"Deputado Federal",partido:"NOVO",uf:"SP",situacao:"Aderido",gravacao:"Sim",veiculados:2,status:"-"},
+  {nome:"Adriana Ventura",mf:"F",cargo:"Deputado Federal",partido:"NOVO",uf:"SP",situacao:"Aderido",gravacao:"Sim",veiculados:2,status:"Rodando"},
   {nome:"Aguinaldo Ribeiro",mf:"M",cargo:"Deputado Federal",partido:"PP",uf:"PB",situacao:"Quente",gravacao:"-",veiculados:0,status:"Agenda"},
-  {nome:"Alexandre Guimarães",mf:"M",cargo:"Deputado Federal",partido:"MDB",uf:"TO",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Aguardando áudio"},
+  {nome:"Alexandre Guimarães",mf:"M",cargo:"Deputado Federal",partido:"MDB",uf:"TO",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Pendência Parlamentar"},
   {nome:"Aliel Machado",mf:"M",cargo:"Deputado Federal",partido:"PV",uf:"PR",situacao:"Quente",gravacao:"-",veiculados:0,status:"Em despacho"},
   {nome:"Altineu Côrtes",mf:"M",cargo:"Deputado Federal",partido:"PL",uf:"RJ",situacao:"Agendado",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Aluisio Mendes",mf:"M",cargo:"Deputado Federal",partido:"Republicanos",uf:"MA",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
@@ -519,26 +580,26 @@ const DATA = [
   {nome:"André Teixeira Filho",mf:"M",cargo:"Secretário Estadual",partido:"PSD",uf:"PE",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Antônia Lúcia",mf:"F",cargo:"Deputado Federal",partido:"MDB",uf:"AC",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Antonio Brito",mf:"M",cargo:"Deputado Federal",partido:"PSD",uf:"BA",situacao:"Quente",gravacao:"-",veiculados:0,status:"Agenda"},
-  {nome:"Any Ortiz",mf:"F",cargo:"Deputado Federal",partido:"Cidadania",uf:"RS",situacao:"Aderido",gravacao:"Sim",veiculados:3,status:"-"},
+  {nome:"Any Ortiz",mf:"F",cargo:"Deputado Federal",partido:"Cidadania",uf:"RS",situacao:"Aderido",gravacao:"Sim",veiculados:3,status:"Rodando"},
   {nome:"Arnaldo Jardim",mf:"M",cargo:"Deputado Federal",partido:"Cidadania",uf:"SP",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Agenda"},
   {nome:"Arthur Oliveira Maia",mf:"M",cargo:"Deputado Federal",partido:"União",uf:"BA",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Átila Lins",mf:"M",cargo:"Deputado Federal",partido:"PSD",uf:"AM",situacao:"Quente",gravacao:"-",veiculados:0,status:"Em despacho"},
   {nome:"Átila Lira",mf:"M",cargo:"Deputado Federal",partido:"PP",uf:"PI",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Aureo Ribeiro",mf:"M",cargo:"Deputado Federal",partido:"Solidariedade",uf:"RJ",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
-  {nome:"Beto Richa",mf:"M",cargo:"Deputado Federal",partido:"PSDB",uf:"PR",situacao:"Aderido",gravacao:"Sim",veiculados:1,status:"-"},
-  {nome:"Bia Kicis",mf:"F",cargo:"Deputado Federal",partido:"PL",uf:"DF",situacao:"Aderido",gravacao:"Não",veiculados:2,status:"Agenda"},
+  {nome:"Beto Richa",mf:"M",cargo:"Deputado Federal",partido:"PSDB",uf:"PR",situacao:"Aderido",gravacao:"Sim",veiculados:1,status:"Rodando"},
+  {nome:"Bia Kicis",mf:"F",cargo:"Deputado Federal",partido:"PL",uf:"DF",situacao:"Aderido",gravacao:"Não",veiculados:2,status:"Rodando"},
   {nome:"Carla Dickson",mf:"F",cargo:"Deputado Federal",partido:"PL",uf:"RN",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Agenda"},
   {nome:"Carlos Sampaio",mf:"M",cargo:"Deputado Federal",partido:"PSD",uf:"SP",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
-  {nome:"Cristiane Britto",mf:"F",cargo:"Ex-Ministra da Mulher",partido:"Republicanos",uf:"DF",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Realinhando momento"},
+  {nome:"Cristiane Britto",mf:"F",cargo:"Ex-Ministra da Mulher",partido:"Republicanos",uf:"DF",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Realinhamento"},
   {nome:"Da Vitoria",mf:"M",cargo:"Deputado Federal",partido:"PP",uf:"ES",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Daniela Reinehr",mf:"F",cargo:"Deputado Federal",partido:"PL",uf:"SC",situacao:"Agendado",gravacao:"-",veiculados:0,status:"-"},
-  {nome:"Danilo Forte",mf:"M",cargo:"Deputado Federal",partido:"União",uf:"CE",situacao:"Aderido",gravacao:"Sim",veiculados:1,status:"-"},
+  {nome:"Danilo Forte",mf:"M",cargo:"Deputado Federal",partido:"União",uf:"CE",situacao:"Aderido",gravacao:"Sim",veiculados:1,status:"Rodando"},
   {nome:"Darci de Matos",mf:"M",cargo:"Ex-Deputado Federal",partido:"PSD",uf:"SC",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Delegado André David",mf:"M",cargo:"Secretário Municipal",partido:"Republicanos",uf:"SE",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Delegado da Cunha",mf:"M",cargo:"Deputado Federal",partido:"PP",uf:"SP",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Diego Garcia",mf:"M",cargo:"Deputado Federal",partido:"Republicanos",uf:"PR",situacao:"Aderido",gravacao:"Sim",veiculados:0,status:"Gravado, ainda não veiculado"},
-  {nome:"Domingos Neto",mf:"M",cargo:"Deputado Federal",partido:"PSD",uf:"CE",situacao:"Aderido",gravacao:"Não",veiculados:1,status:"Agenda"},
-  {nome:"Domingos Sávio",mf:"M",cargo:"Deputado Federal",partido:"PL",uf:"MG",situacao:"Aderido",gravacao:"Sim",veiculados:12,status:"-"},
+  {nome:"Domingos Neto",mf:"M",cargo:"Deputado Federal",partido:"PSD",uf:"CE",situacao:"Aderido",gravacao:"Não",veiculados:1,status:"Rodando"},
+  {nome:"Domingos Sávio",mf:"M",cargo:"Deputado Federal",partido:"PL",uf:"MG",situacao:"Aderido",gravacao:"Sim",veiculados:12,status:"Rodando"},
   {nome:"Doutor Luizinho",mf:"M",cargo:"Deputado Federal",partido:"PP",uf:"RJ",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Dr. Daniel Soranz",mf:"M",cargo:"Deputado Federal",partido:"PSD",uf:"RJ",situacao:"Quente",gravacao:"-",veiculados:0,status:"Pendência CACB"},
   {nome:"Dr. Fernando Máximo",mf:"M",cargo:"Deputado Federal",partido:"União",uf:"RO",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Agenda"},
@@ -546,7 +607,7 @@ const DATA = [
   {nome:"Eduardo Velloso",mf:"M",cargo:"Deputado Federal",partido:"União",uf:"AC",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Eli Borges",mf:"M",cargo:"Deputado Federal",partido:"PL",uf:"TO",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Euclydes Pettersen",mf:"M",cargo:"Deputado Federal",partido:"Republicanos",uf:"MG",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
-  {nome:"Evair Vieira de Melo",mf:"M",cargo:"Deputado Federal",partido:"PP",uf:"ES",situacao:"Aderido",gravacao:"Sim",veiculados:1,status:"-"},
+  {nome:"Evair Vieira de Melo",mf:"M",cargo:"Deputado Federal",partido:"PP",uf:"ES",situacao:"Aderido",gravacao:"Sim",veiculados:1,status:"Rodando"},
   {nome:"Fabio Garcia",mf:"M",cargo:"Deputado Federal",partido:"União",uf:"MT",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Agenda"},
   {nome:"Fabio Lopes",mf:"M",cargo:"Vereador",partido:"PL",uf:"PB",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Fátima Pelaes",mf:"F",cargo:"Deputado Federal",partido:"Republicanos",uf:"AP",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
@@ -554,20 +615,20 @@ const DATA = [
   {nome:"Fernando Rodolfo",mf:"M",cargo:"Deputado Federal",partido:"PL",uf:"PE",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Franco Cartafina",mf:"M",cargo:"Ex-Deputado Federal",partido:"PP",uf:"MG",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Gerlane Baccarin",mf:"F",cargo:"Primeira-Dama Est. RR",partido:"PP",uf:"RR",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
-  {nome:"Gisela Simona",mf:"F",cargo:"Deputado Federal",partido:"União",uf:"MT",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Realinhando momento"},
+  {nome:"Gisela Simona",mf:"F",cargo:"Deputado Federal",partido:"União",uf:"MT",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Realinhamento"},
   {nome:"Greyce Elias",mf:"F",cargo:"Deputado Federal",partido:"Avante",uf:"MG",situacao:"Aderido",gravacao:"Sim",veiculados:0,status:"Gravado, ainda não veiculado"},
   {nome:"Hercílio Coelho Diniz",mf:"M",cargo:"Deputado Federal",partido:"MDB",uf:"MG",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Hildo Rocha",mf:"M",cargo:"Deputado Federal",partido:"MDB",uf:"MA",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Agenda"},
-  {nome:"Hugo Leal",mf:"M",cargo:"Deputado Federal",partido:"PSD",uf:"RJ",situacao:"Aderido",gravacao:"Sim",veiculados:2,status:"-"},
+  {nome:"Hugo Leal",mf:"M",cargo:"Deputado Federal",partido:"PSD",uf:"RJ",situacao:"Aderido",gravacao:"Sim",veiculados:2,status:"Rodando"},
   {nome:"Isnaldo Bulhões Jr.",mf:"M",cargo:"Deputado Federal",partido:"MDB",uf:"AL",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Jaime Verruck",mf:"M",cargo:"Secretário Estadual",partido:"PSD",uf:"MS",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"João Maia",mf:"M",cargo:"Deputado Federal",partido:"PP",uf:"RN",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Temas"},
-  {nome:"Joaquim Passarinho",mf:"M",cargo:"Deputado Federal",partido:"PL",uf:"PA",situacao:"Aderido",gravacao:"Sim",veiculados:7,status:"-"},
+  {nome:"Joaquim Passarinho",mf:"M",cargo:"Deputado Federal",partido:"PL",uf:"PA",situacao:"Aderido",gravacao:"Sim",veiculados:7,status:"Rodando"},
   {nome:"Jonas Donizette",mf:"M",cargo:"Deputado Federal",partido:"PSB",uf:"SP",situacao:"Agendado",gravacao:"-",veiculados:0,status:"-"},
-  {nome:"Jorge Goetten",mf:"M",cargo:"Deputado Federal",partido:"Republicanos",uf:"SC",situacao:"Aderido",gravacao:"Sim",veiculados:4,status:"-"},
+  {nome:"Jorge Goetten",mf:"M",cargo:"Deputado Federal",partido:"Republicanos",uf:"SC",situacao:"Aderido",gravacao:"Sim",veiculados:4,status:"Rodando"},
   {nome:"Julia Zanatta",mf:"F",cargo:"Deputado Federal",partido:"PL",uf:"SC",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Agenda"},
   {nome:"Julio Cesar Ribeiro",mf:"M",cargo:"Deputado Federal",partido:"Republicanos",uf:"DF",situacao:"Quente",gravacao:"-",veiculados:0,status:"Agenda"},
-  {nome:"Julio Lopes",mf:"M",cargo:"Deputado Federal",partido:"PP",uf:"RJ",situacao:"Aderido",gravacao:"Sim",veiculados:2,status:"-"},
+  {nome:"Julio Lopes",mf:"M",cargo:"Deputado Federal",partido:"PP",uf:"RJ",situacao:"Aderido",gravacao:"Sim",veiculados:2,status:"Rodando"},
   {nome:"Júnior Ferrari",mf:"M",cargo:"Deputado Federal",partido:"PSD",uf:"PA",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Juscelino Filho",mf:"M",cargo:"Deputado Federal",partido:"União",uf:"MA",situacao:"Quente",gravacao:"-",veiculados:0,status:"Em despacho"},
   {nome:"Lêda Borges",mf:"F",cargo:"Deputado Federal",partido:"PSDB",uf:"GO",situacao:"Quente",gravacao:"-",veiculados:0,status:"Agenda"},
@@ -577,7 +638,7 @@ const DATA = [
   {nome:"Luciano Amaral",mf:"M",cargo:"Deputado Federal",partido:"PSD",uf:"AL",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Luciano Azevedo",mf:"M",cargo:"Ex-Deputado Federal",partido:"PSD",uf:"RS",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Luiz Carlos Hauly",mf:"M",cargo:"Deputado Federal",partido:"Podemos",uf:"PR",situacao:"Quente",gravacao:"-",veiculados:0,status:"Em despacho"},
-  {nome:"Luiz Gastão",mf:"M",cargo:"Deputado Federal",partido:"PSD",uf:"CE",situacao:"Aderido",gravacao:"Sim",veiculados:4,status:"-"},
+  {nome:"Luiz Gastão",mf:"M",cargo:"Deputado Federal",partido:"PSD",uf:"CE",situacao:"Aderido",gravacao:"Sim",veiculados:4,status:"Rodando"},
   {nome:"Luiz Philippe de Orleans e Bragança",mf:"M",cargo:"Deputado Federal",partido:"PL",uf:"SP",situacao:"Quente",gravacao:"-",veiculados:0,status:"Agenda"},
   {nome:"Marangoni [Fernando]",mf:"M",cargo:"Deputado Federal",partido:"União",uf:"SP",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Temas"},
   {nome:"Marcel van Hattem",mf:"M",cargo:"Deputado Federal",partido:"NOVO",uf:"RS",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
@@ -592,15 +653,15 @@ const DATA = [
   {nome:"Paulo Bengtson",mf:"M",cargo:"Ex-Deputado Federal",partido:"PTB",uf:"PA",situacao:"Quente",gravacao:"-",veiculados:0,status:"Agenda"},
   {nome:"Paulo Serra",mf:"M",cargo:"Ex-Prefeito",partido:"PSDB",uf:"SP",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Pedro Lucas Fernandes",mf:"M",cargo:"Deputado Federal",partido:"União",uf:"MA",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
-  {nome:"Pedro Lupion",mf:"M",cargo:"Deputado Federal",partido:"Republicanos",uf:"PR",situacao:"Aderido",gravacao:"Sim",veiculados:1,status:"-"},
+  {nome:"Pedro Lupion",mf:"M",cargo:"Deputado Federal",partido:"Republicanos",uf:"PR",situacao:"Aderido",gravacao:"Sim",veiculados:1,status:"Rodando"},
   {nome:"Pedro Paulo",mf:"M",cargo:"Deputado Federal",partido:"PSD",uf:"RJ",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Pedro Sales",mf:"M",cargo:"Ex-Secretário Estadual",partido:"União",uf:"GO",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Rafael Prudente",mf:"M",cargo:"Deputado Federal",partido:"MDB",uf:"DF",situacao:"Agendado",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Regina Nunes",mf:"F",cargo:"Primeira-Dama Mun. SP",partido:"MDB",uf:"SP",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Roberto Duarte",mf:"M",cargo:"Deputado Federal",partido:"Republicanos",uf:"AC",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Robinson Faria",mf:"M",cargo:"Deputado Federal",partido:"PP",uf:"RN",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Agenda"},
-  {nome:"Rodrigo da Zaeli",mf:"M",cargo:"Deputado Federal",partido:"PL",uf:"MT",situacao:"Aderido",gravacao:"Sim",veiculados:1,status:"-"},
-  {nome:"Rodrigo Melo [Tenente Melo]",mf:"M",cargo:"Ex-Vereador",partido:"NOVO",uf:"MG",situacao:"Aderido",gravacao:"Sim",veiculados:1,status:"-"},
+  {nome:"Rodrigo da Zaeli",mf:"M",cargo:"Deputado Federal",partido:"PL",uf:"MT",situacao:"Aderido",gravacao:"Sim",veiculados:1,status:"Rodando"},
+  {nome:"Rodrigo Melo [Tenente Melo]",mf:"M",cargo:"Ex-Vereador",partido:"NOVO",uf:"MG",situacao:"Aderido",gravacao:"Sim",veiculados:1,status:"Rodando"},
   {nome:"Rodrigo Valadares",mf:"M",cargo:"Deputado Federal",partido:"União",uf:"SE",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Rosana Valle",mf:"F",cargo:"Deputado Federal",partido:"PL",uf:"SP",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Temas"},
   {nome:"Rosângela Gomes",mf:"F",cargo:"Deputado Federal",partido:"Republicanos",uf:"RJ",situacao:"Quente",gravacao:"-",veiculados:0,status:"Agenda"},
@@ -608,26 +669,34 @@ const DATA = [
   {nome:"Sidney Leite",mf:"M",cargo:"Deputado Federal",partido:"PSD",uf:"AM",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Agenda"},
   {nome:"Silas Câmara",mf:"M",cargo:"Deputado Federal",partido:"Republicanos",uf:"AM",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Silvia Cristina",mf:"F",cargo:"Deputado Federal",partido:"PP",uf:"RO",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Temas"},
-  {nome:"Soraya Santos",mf:"F",cargo:"Deputado Federal",partido:"PL",uf:"RJ",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Agendado"},
-  {nome:"Thiago de Joaldo",mf:"M",cargo:"Deputado Federal",partido:"PP",uf:"SE",situacao:"Aderido",gravacao:"Sim",veiculados:1,status:"-"},
+  {nome:"Soraya Santos",mf:"F",cargo:"Deputado Federal",partido:"PL",uf:"RJ",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Agenda"},
+  {nome:"Thiago de Joaldo",mf:"M",cargo:"Deputado Federal",partido:"PP",uf:"SE",situacao:"Aderido",gravacao:"Sim",veiculados:1,status:"Rodando"},
   {nome:"Thiago Flores",mf:"M",cargo:"Deputado Federal",partido:"Republicanos",uf:"RO",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
-  {nome:"Tiago Dimas",mf:"M",cargo:"Deputado Federal",partido:"Podemos",uf:"TO",situacao:"Aderido",gravacao:"Sim",veiculados:1,status:"-"},
+  {nome:"Tiago Dimas",mf:"M",cargo:"Deputado Federal",partido:"Podemos",uf:"TO",situacao:"Aderido",gravacao:"Sim",veiculados:1,status:"Rodando"},
   {nome:"Vermelho [Nelsi Coguetto Maria]",mf:"M",cargo:"Deputado Federal",partido:"PP",uf:"PR",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Wellington Roberto",mf:"M",cargo:"Deputado Federal",partido:"PL",uf:"PB",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Yandra Moura",mf:"F",cargo:"Deputado Federal",partido:"União",uf:"SE",situacao:"Quente",gravacao:"-",veiculados:0,status:"On hold"},
-  {nome:"Zé Adriano",mf:"M",cargo:"Deputado Federal",partido:"PP",uf:"AC",situacao:"Aderido",gravacao:"Não",veiculados:2,status:"Agenda"},
+  {nome:"Zé Adriano",mf:"M",cargo:"Deputado Federal",partido:"PP",uf:"AC",situacao:"Aderido",gravacao:"Não",veiculados:2,status:"Rodando"},
   {nome:"Zé Haroldo Cathedral",mf:"M",cargo:"Deputado Federal",partido:"PSD",uf:"RR",situacao:"Quente",gravacao:"-",veiculados:0,status:"Em despacho"},
-  {nome:"Zé Neto",mf:"M",cargo:"Deputado Federal",partido:"PT",uf:"BA",situacao:"Aderido",gravacao:"Sim",veiculados:1,status:"-"},
+  {nome:"Zé Neto",mf:"M",cargo:"Deputado Federal",partido:"PT",uf:"BA",situacao:"Aderido",gravacao:"Sim",veiculados:1,status:"Rodando"},
   {nome:"Zé Vitor",mf:"M",cargo:"Deputado Federal",partido:"PL",uf:"MG",situacao:"Aderido",gravacao:"Sim",veiculados:0,status:"Gravado, ainda não veiculado"},
   {nome:"Benes Leocádio",mf:"M",cargo:"Deputado Federal",partido:"União",uf:"RN",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Temas"},
   {nome:"Luis Carlos Gomes",mf:"M",cargo:"Deputado Federal",partido:"Republicanos",uf:"RJ",situacao:"Quente",gravacao:"Não",veiculados:0,status:"Em despacho"},
-  {nome:"Efraim Filho",mf:"M",cargo:"Senador",partido:"PL",uf:"PB",situacao:"Aderido",gravacao:"Sim",veiculados:3,status:"-"},
-  {nome:"André Amaral Filho",mf:"M",cargo:"Ex-Deputado Federal",partido:"União",uf:"PB",situacao:"Aderido",gravacao:"Sim",veiculados:1,status:"-"}
+  {nome:"Efraim Filho",mf:"M",cargo:"Senador",partido:"PL",uf:"PB",situacao:"Aderido",gravacao:"Sim",veiculados:3,status:"Rodando"},
+  {nome:"André Amaral Filho",mf:"M",cargo:"Ex-Deputado Federal",partido:"União",uf:"PB",situacao:"Aderido",gravacao:"Sim",veiculados:1,status:"Rodando"}
 ];
 
 const UF_NOMES = {AC:"Acre",AL:"Alagoas",AM:"Amazonas",AP:"Amapá",BA:"Bahia",CE:"Ceará",DF:"Distrito Federal",ES:"Espírito Santo",GO:"Goiás",MA:"Maranhão",MG:"Minas Gerais",MS:"Mato Grosso do Sul",MT:"Mato Grosso",PA:"Pará",PB:"Paraíba",PE:"Pernambuco",PI:"Piauí",PR:"Paraná",RJ:"Rio de Janeiro",RN:"Rio Grande do Norte",RO:"Rondônia",RR:"Roraima",RS:"Rio Grande do Sul",SC:"Santa Catarina",SE:"Sergipe",SP:"São Paulo",TO:"Tocantins"};
 
-const COR = {Aderido:"#4CAF50", Quente:"#E36C0A", Agendado:"#4F81BD", Aberto:"#B0B0B0"};
+const COR = {Aderido:"#10B981", Quente:"#F59E0B", Agendado:"#4F81BD", Aberto:"#94A3B8"};
+const COR_STATUS = {
+  "Rodando":                       "#10B981",
+  "Agenda":                        "#D97706",
+  "Temas":                         "#FCD34D",
+  "Gravado, ainda não veiculado":  "#3B82F6",
+  "Realinhamento":                 "#DC2626",
+  "Pendência Parlamentar":         "#94A3B8"
+};
 
 // ============== HELPERS ==============
 function countBy(arr, key) {
@@ -683,22 +752,34 @@ function namesWhere(predicate) {
   return DATA.filter(predicate).map(d => d.nome);
 }
 
-// ============== FUNIL (clicável) ==============
-const funilOrdem = ["Aberto","Quente","Agendado","Aderido"];
+// ============== FUNIL MODERNO (clicável) ==============
+const funilStages = [
+  { key: "Aberto",   desc: "Mapeados — contato ainda pendente" },
+  { key: "Quente",   desc: "Em prospecção — sinal positivo" },
+  { key: "Agendado", desc: "Reunião confirmada na agenda" },
+  { key: "Aderido",  desc: "Compromisso firmado — pipeline ativo" }
+];
 const funilCount = countBy(DATA, "situacao");
-const funilMax = Math.max(...funilOrdem.map(s => funilCount[s] || 0));
 const funilEl = document.getElementById("funnel");
-funilOrdem.forEach(s => {
-  const n = funilCount[s] || 0;
-  const w = (n / funilMax) * 100;
+funilStages.forEach(stage => {
+  const n = funilCount[stage.key] || 0;
+  const pct = ((n / total) * 100).toFixed(0);
   const row = document.createElement("div");
   row.className = "funnel-row";
+  row.dataset.stage = stage.key;
   row.innerHTML = `
-    <div>${s}</div>
-    <div class="funnel-bar" style="width:${Math.max(w, 4)}%; background:${COR[s]}">${n}</div>
-    <div class="funnel-count">${n} <span style="color:#999;font-weight:400">(${((n/total)*100).toFixed(0)}%)</span></div>
+    <div class="funnel-shape">
+      <span class="stage-name">${stage.key}</span>
+      <span class="stage-stats">
+        <span class="stage-count">${n}</span>
+        <span class="stage-pct">${pct}% da lista</span>
+      </span>
+    </div>
+    <div class="funnel-desc">${stage.desc}</div>
   `;
-  row.addEventListener("click", () => setTableSubset(namesWhere(d => d.situacao === s), `Situação: ${s}`));
+  row.querySelector(".funnel-shape").addEventListener("click", () =>
+    setTableSubset(namesWhere(d => d.situacao === stage.key), `Situação: ${stage.key}`)
+  );
   funilEl.appendChild(row);
 });
 
@@ -711,18 +792,26 @@ document.getElementById("kpiVeiculados").addEventListener("click", () =>
   setTableSubset(namesWhere(d => d.veiculados > 0), "Parlamentares com material veiculado"));
 
 // ============== CHART CONFIG ==============
+Chart.register(ChartDataLabels);
 Chart.defaults.font.family = "'Segoe UI', sans-serif";
 Chart.defaults.font.size = 12;
 Chart.defaults.color = "#374151";
+Chart.defaults.plugins.datalabels = { display: false }; // off by default — opt-in per chart
 
 const donutOpts = (showLegend = true, onClickHandler = null) => ({
   responsive: true,
   maintainAspectRatio: false,
-  cutout: "60%",
+  cutout: "55%",
   onHover: (e, els) => { e.native.target.style.cursor = els.length ? "pointer" : "default"; },
   onClick: onClickHandler,
   plugins: {
-    legend: { display: showLegend, position: "bottom", labels: { padding: 12, boxWidth: 12, font: { size: 12 } } },
+    legend: { display: showLegend, position: "bottom", labels: { padding: 14, boxWidth: 14, font: { size: 13 } } },
+    datalabels: {
+      display: (ctx) => ctx.dataset.data[ctx.dataIndex] > 0,
+      color: "#fff",
+      font: { weight: "700", size: 16 },
+      formatter: (v) => v
+    },
     tooltip: {
       callbacks: {
         label: (ctx) => {
@@ -741,8 +830,22 @@ const barOpts = (onClickHandler = null) => ({
   maintainAspectRatio: false,
   onHover: (e, els) => { e.native.target.style.cursor = els.length ? "pointer" : "default"; },
   onClick: onClickHandler,
-  scales: { x: { beginAtZero: true, ticks: { precision: 0 } } },
-  plugins: { legend: { display: false } }
+  scales: {
+    x: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: "#E5E7EB" } },
+    y: { grid: { display: false }, ticks: { autoSkip: false } }
+  },
+  plugins: {
+    legend: { display: false },
+    datalabels: {
+      display: (ctx) => ctx.dataset.data[ctx.dataIndex] > 0,
+      anchor: "end",
+      align: "end",
+      offset: 4,
+      color: "#1F2937",
+      font: { weight: "700", size: 12 },
+      formatter: (v) => v
+    }
+  }
 });
 
 // ============== PROGRESS BARS: GRAVOU + VEICULOU ==============
@@ -783,16 +886,17 @@ renderProgress(
   () => setTableSubset(gravaramEVeicularam.map(d => d.nome), "Aderidos que gravaram E já veicularam")
 );
 
-// ============== PIPELINE DOS ADERIDOS (pizza) ==============
+// ============== PIPELINE DOS ADERIDOS (pizza por status) ==============
 const pipelineStages = [
-  { label: "Veiculado",                         color: "#1B5E20", filter: d => d.situacao === "Aderido" && d.veiculados > 0 },
-  { label: "Gravado, aguardando veiculação",    color: "#66BB6A", filter: d => d.situacao === "Aderido" && d.gravacao === "Sim" && d.veiculados === 0 },
-  { label: "Em agenda para gravação",           color: "#FFA726", filter: d => d.situacao === "Aderido" && (d.status === "Agenda" || d.status === "Agendado") },
-  { label: "Em definição de temas",             color: "#FFCA28", filter: d => d.situacao === "Aderido" && d.status === "Temas" },
-  { label: "Aguardando áudio",                  color: "#FF7043", filter: d => d.situacao === "Aderido" && d.status === "Aguardando áudio" },
-  { label: "Em realinhamento de momento",       color: "#9E9E9E", filter: d => d.situacao === "Aderido" && d.status === "Realinhando momento" }
+  { label: "Rodando",                          status: "Rodando" },
+  { label: "Em agenda",                        status: "Agenda" },
+  { label: "Definição de temas",               status: "Temas" },
+  { label: "Gravado, aguardando veiculação",   status: "Gravado, ainda não veiculado" },
+  { label: "Em realinhamento",                 status: "Realinhamento" },
+  { label: "Pendência parlamentar",            status: "Pendência Parlamentar" }
 ];
-const pipelineCounts = pipelineStages.map(s => DATA.filter(s.filter).length);
+const pipelineCounts = pipelineStages.map(s => DATA.filter(d => d.situacao === "Aderido" && d.status === s.status).length);
+const pipelineColors = pipelineStages.map(s => COR_STATUS[s.status]);
 const pipelineTotal = pipelineCounts.reduce((a,b) => a+b, 0);
 new Chart(document.getElementById("chartPipeline"), {
   type: "doughnut",
@@ -800,25 +904,35 @@ new Chart(document.getElementById("chartPipeline"), {
     labels: pipelineStages.map(s => s.label),
     datasets: [{
       data: pipelineCounts,
-      backgroundColor: pipelineStages.map(s => s.color),
-      borderWidth: 2,
-      borderColor: "#fff"
+      backgroundColor: pipelineColors,
+      borderWidth: 3,
+      borderColor: "#fff",
+      hoverOffset: 8
     }]
   },
   options: {
     responsive: true,
     maintainAspectRatio: false,
-    cutout: "55%",
+    cutout: "48%",
     onHover: (e, els) => { e.native.target.style.cursor = els.length ? "pointer" : "default"; },
     onClick: (e, els) => {
       if (!els.length) return;
       const i = els[0].index;
-      setTableSubset(namesWhere(pipelineStages[i].filter), `Pipeline: ${pipelineStages[i].label}`);
+      setTableSubset(
+        namesWhere(d => d.situacao === "Aderido" && d.status === pipelineStages[i].status),
+        `Pipeline: ${pipelineStages[i].label}`
+      );
     },
     plugins: {
       legend: {
         position: "right",
-        labels: { padding: 12, boxWidth: 14, font: { size: 12 } }
+        labels: { padding: 14, boxWidth: 14, font: { size: 13 } }
+      },
+      datalabels: {
+        display: (ctx) => ctx.dataset.data[ctx.dataIndex] > 0,
+        color: (ctx) => pipelineStages[ctx.dataIndex].status === "Temas" ? "#1F2937" : "#fff",
+        font: { weight: "700", size: 16 },
+        formatter: (v) => v
       },
       tooltip: {
         callbacks: {
@@ -858,8 +972,9 @@ new Chart(document.getElementById("chartMF"), {
     labels: mfLabels,
     datasets: [{
       data: [mfCount.M || 0, mfCount.F || 0],
-      backgroundColor: ["#365F91", "#C0504D"],
-      borderWidth: 0
+      backgroundColor: ["#2E5E91", "#7C9EB2"],
+      borderWidth: 2,
+      borderColor: "#fff"
     }]
   },
   options: donutOpts(true, (e, els) => {
@@ -894,10 +1009,18 @@ new Chart(document.getElementById("chartPartido"), {
       setTableSubset(namesWhere(d => d.situacao === "Aderido" && d.partido === partido), `Aderidos — Partido: ${partido}`);
     },
     scales: {
-      x: { beginAtZero: true, ticks: { precision: 0, font: { size: 10 } } },
-      y: { ticks: { font: { size: 10 }, autoSkip: false } }
+      x: { beginAtZero: true, ticks: { precision: 0, font: { size: 10 } }, grid: { color: "#E5E7EB" } },
+      y: { ticks: { font: { size: 11 }, autoSkip: false }, grid: { display: false } }
     },
-    plugins: { legend: { display: false } }
+    plugins: {
+      legend: { display: false },
+      datalabels: {
+        display: (ctx) => ctx.dataset.data[ctx.dataIndex] > 0,
+        anchor: "end", align: "end", offset: 4,
+        color: "#1F2937", font: { weight: "700", size: 11 },
+        formatter: (v) => v
+      }
+    }
   }
 });
 
@@ -924,11 +1047,17 @@ new Chart(document.getElementById("chartRankingParlamentares"), {
       setTableSubset([dep.nome], dep.nome);
     },
     scales: {
-      x: { beginAtZero: true, ticks: { precision: 0 } },
-      y: { ticks: { font: { size: 11 }, autoSkip: false } }
+      x: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: "#E5E7EB" } },
+      y: { ticks: { font: { size: 11 }, autoSkip: false }, grid: { display: false } }
     },
     plugins: {
       legend: { display: false },
+      datalabels: {
+        display: true,
+        anchor: "end", align: "end", offset: 4,
+        color: "#1F2937", font: { weight: "700", size: 12 },
+        formatter: (v) => v
+      },
       tooltip: { callbacks: { label: (ctx) => `${ctx.parsed.x} peças veiculadas` } }
     }
   }
@@ -958,10 +1087,18 @@ new Chart(document.getElementById("chartRankingUFAderidos"), {
       setTableSubset(namesWhere(d => d.situacao === "Aderido" && d.uf === uf), `Aderidos em ${UF_NOMES[uf]}`);
     },
     scales: {
-      x: { beginAtZero: true, ticks: { precision: 0, font: { size: 10 } } },
-      y: { ticks: { font: { size: 11 }, autoSkip: false } }
+      x: { beginAtZero: true, ticks: { precision: 0, font: { size: 10 } }, grid: { color: "#E5E7EB" } },
+      y: { ticks: { font: { size: 11 }, autoSkip: false }, grid: { display: false } }
     },
-    plugins: { legend: { display: false } }
+    plugins: {
+      legend: { display: false },
+      datalabels: {
+        display: true,
+        anchor: "end", align: "end", offset: 4,
+        color: "#1F2937", font: { weight: "700", size: 12 },
+        formatter: (v) => v
+      }
+    }
   }
 });
 
@@ -983,7 +1120,7 @@ new Chart(document.getElementById("chartRankingUFConversao"), {
     labels: ufConversao.map(x => `${x.uf} · ${x.aderidos}/${x.total}`),
     datasets: [{
       data: ufConversao.map(x => x.pct),
-      backgroundColor: "#4CAF50",
+      backgroundColor: "#2E5E91",
       borderRadius: 4
     }]
   },
@@ -998,11 +1135,17 @@ new Chart(document.getElementById("chartRankingUFConversao"), {
       setTableSubset(namesWhere(d => d.uf === x.uf), `Lista em ${UF_NOMES[x.uf]} (${x.aderidos}/${x.total})`);
     },
     scales: {
-      x: { beginAtZero: true, max: 100, ticks: { precision: 0, font: { size: 10 }, callback: v => v + "%" } },
-      y: { ticks: { font: { size: 11 }, autoSkip: false } }
+      x: { beginAtZero: true, max: 100, ticks: { precision: 0, font: { size: 10 }, callback: v => v + "%" }, grid: { color: "#E5E7EB" } },
+      y: { ticks: { font: { size: 11 }, autoSkip: false }, grid: { display: false } }
     },
     plugins: {
       legend: { display: false },
+      datalabels: {
+        display: true,
+        anchor: "end", align: "end", offset: 4,
+        color: "#1F2937", font: { weight: "700", size: 12 },
+        formatter: (v) => v.toFixed(0) + "%"
+      },
       tooltip: {
         callbacks: {
           label: (ctx) => {
@@ -1060,8 +1203,8 @@ function renderMap(mode) {
   const colorScales = {
     aderido: d3.scaleSequential(d3.interpolateGreens).domain([0, max]),
     quente: d3.scaleSequential(d3.interpolateOranges).domain([0, max]),
-    total: d3.scaleSequential(d3.interpolateBlues).domain([0, max]),
-    conversao: d3.scaleSequential(d3.interpolatePurples).domain([0, 100])
+    total: d3.scaleSequential(d3.interpolateGreys).domain([0, max]),
+    conversao: d3.scaleSequential(d3.interpolateBlues).domain([0, 100])
   };
   const scaleColor = colorScales[mode];
 
@@ -1102,8 +1245,8 @@ function renderMap(mode) {
   const grads = {
     aderido:   "linear-gradient(to right, #F7FCF5, #00441B)",
     quente:    "linear-gradient(to right, #FFF5EB, #7F2704)",
-    total:     "linear-gradient(to right, #F7FBFF, #08306B)",
-    conversao: "linear-gradient(to right, #FCFBFD, #3F007D)"
+    total:     "linear-gradient(to right, #FFFFFF, #1F2937)",
+    conversao: "linear-gradient(to right, #F7FBFF, #08306B)"
   };
   document.getElementById("legendScale").style.background = grads[mode];
 
@@ -1143,7 +1286,7 @@ d3.json("https://raw.githubusercontent.com/codeforamerica/click_that_hood/master
           <div>Total na lista: <strong>${totalUF}</strong></div>
           <div>Aderidos: <strong style="color:#4CAF50">${aderUF}</strong></div>
           <div>Quentes: <strong style="color:#E36C0A">${quenteUF}</strong></div>
-          <div>Conversão: <strong style="color:#6A1B9A">${convUF}%</strong></div>
+          <div>Conversão: <strong style="color:#1E40AF">${convUF}%</strong></div>
         `;
       })
       .on("mousemove", function(event) {
