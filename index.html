@@ -732,7 +732,7 @@ const funnelData = [
   { key:"Veiculados", label:"VEICULADOS", desc:"Material já veiculado",          count: veiculadosN,               color:"#047857", filter: d => d.veiculados > 0 }
 ];
 
-new Chart(document.getElementById("chartFunnel"), {
+const cFunnel = new Chart(document.getElementById("chartFunnel"), {
   type: "bar",
   data: {
     labels: funnelData.map(s => [s.label, s.desc]),
@@ -770,15 +770,6 @@ new Chart(document.getElementById("chartFunnel"), {
     interaction: { mode: "index", intersect: false },
     plugins: {
       legend: { display: false },
-      datalabels: {
-        display: true,
-        anchor: "end", align: "end", offset: 6,
-        color: "#1F2937", font: { weight: "700", size: 16 },
-        formatter: (v) => {
-          const n = typeof v === "number" ? v : (v && (v.y ?? v.x)) ?? 0;
-          return n > 0 ? n : "";
-        }
-      },
       tooltip: {
         enabled: true,
         backgroundColor: "rgba(31, 56, 100, 0.95)",
@@ -798,6 +789,11 @@ new Chart(document.getElementById("chartFunnel"), {
     }
   }
 });
+setChartLabels(cFunnel, {
+  display: true, anchor: "end", align: "end", offset: 6,
+  color: "#1F2937", font: { weight: "700", size: 16 },
+  formatter: (n) => n > 0 ? n : ""
+});
 
 // ============== KPIs CLICÁVEIS ==============
 document.getElementById("kpiTotal").addEventListener("click", () =>
@@ -808,11 +804,16 @@ document.getElementById("kpiVeiculados").addEventListener("click", () =>
   setTableSubset(namesWhere(d => d.veiculados > 0), "Parlamentares com material veiculado"));
 
 // ============== CHART CONFIG ==============
-// Custom datalabels plugin (substitui chartjs-plugin-datalabels que tem bug com Chart.js v4.4)
+// Custom datalabels plugin. Opcoes ficam num WeakMap externo para que o
+// scriptable-resolver do Chart.js v4 nao execute as funcoes formatter()
+// durante o merge de opcoes (bug em que Chart.js chamava formatter(undefined)
+// e substituia a funcao pelo resultado da execucao convertido em string).
+const _chartLabels = new WeakMap();
+function setChartLabels(chart, labelOpts) { _chartLabels.set(chart, labelOpts); chart.update(); }
 const SimpleDatalabels = {
   id: "simpleDatalabels",
   afterDatasetsDraw(chart) {
-    const opts = chart.options.plugins && chart.options.plugins.datalabels;
+    const opts = _chartLabels.get(chart);
     if (!opts || opts.display === false) return;
     const ctx = chart.ctx;
     chart.data.datasets.forEach((ds, dsIdx) => {
@@ -876,12 +877,6 @@ const donutOpts = (showLegend = true, onClickHandler = null) => ({
   onClick: onClickHandler,
   plugins: {
     legend: { display: showLegend, position: "bottom", labels: { padding: 14, boxWidth: 14, font: { size: 13 } } },
-    datalabels: {
-      display: true,
-      color: "#fff",
-      font: { weight: "700", size: 16 },
-      formatter: (v) => v
-    },
     tooltip: {
       callbacks: {
         label: (ctx) => {
@@ -905,19 +900,7 @@ const barOpts = (onClickHandler = null) => ({
     y: { grid: { display: false }, ticks: { autoSkip: false } }
   },
   plugins: {
-    legend: { display: false },
-    datalabels: {
-      display: true,
-      anchor: "end",
-      align: "end",
-      offset: 4,
-      color: "#1F2937",
-      font: { weight: "700", size: 12 },
-      formatter: (v) => {
-        const n = typeof v === "number" ? v : (v && (v.x ?? v.y)) ?? 0;
-        return n > 0 ? n : "";
-      }
-    }
+    legend: { display: false }
   }
 });
 
@@ -979,7 +962,7 @@ const pipelineSorted = {
   colors: pipelineSortedIdx.map(i => pipelineColors[i]),
   stages: pipelineSortedIdx.map(i => pipelineStages[i])
 };
-new Chart(document.getElementById("chartPipeline"), {
+const cPipeline = new Chart(document.getElementById("chartPipeline"), {
   type: "bar",
   data: {
     labels: pipelineSorted.labels,
@@ -1010,15 +993,6 @@ new Chart(document.getElementById("chartPipeline"), {
     },
     plugins: {
       legend: { display: false },
-      datalabels: {
-        display: true,
-        anchor: "end", align: "end", offset: 6,
-        color: "#1F2937", font: { weight: "700", size: 14 },
-        formatter: (v) => {
-          const n = typeof v === "number" ? v : (v && (v.x ?? v.y)) ?? 0;
-          return n > 0 ? n : "";
-        }
-      },
       tooltip: {
         callbacks: {
           label: (ctx) => `${ctx.parsed.x} aderidos (${((ctx.parsed.x/pipelineTotal)*100).toFixed(1)}%)`
@@ -1027,10 +1001,15 @@ new Chart(document.getElementById("chartPipeline"), {
     }
   }
 });
+setChartLabels(cPipeline, {
+  display: true, anchor: "end", align: "end", offset: 6,
+  color: "#1F2937", font: { weight: "700", size: 14 },
+  formatter: (n) => n > 0 ? n : ""
+});
 
 // ============== CARGO ==============
 const cargoCount = sortedEntries(countBy(aderidos, "cargo"));
-new Chart(document.getElementById("chartCargo"), {
+const cCargo = new Chart(document.getElementById("chartCargo"), {
   type: "bar",
   data: {
     labels: cargoCount.map(e => e[0]),
@@ -1046,12 +1025,17 @@ new Chart(document.getElementById("chartCargo"), {
     setTableSubset(namesWhere(d => d.situacao === "Aderido" && d.cargo === cargo), `Aderidos — Cargo: ${cargo}`);
   })
 });
+setChartLabels(cCargo, {
+  display: true, anchor: "end", align: "end", offset: 4,
+  color: "#1F2937", font: { weight: "700", size: 12 },
+  formatter: (n) => n > 0 ? n : ""
+});
 
 // ============== M/F ==============
 const mfCount = countBy(aderidos, "mf");
 const mfLabels = ["Masculino", "Feminino"];
 const mfKeys = ["M", "F"];
-new Chart(document.getElementById("chartMF"), {
+const cMF = new Chart(document.getElementById("chartMF"), {
   type: "doughnut",
   data: {
     labels: mfLabels,
@@ -1068,10 +1052,14 @@ new Chart(document.getElementById("chartMF"), {
     setTableSubset(namesWhere(d => d.situacao === "Aderido" && d.mf === mfKeys[i]), `Aderidos — ${mfLabels[i]}`);
   })
 });
+setChartLabels(cMF, {
+  display: true, color: "#fff", font: { weight: "700", size: 16 },
+  formatter: (n) => n > 0 ? n : ""
+});
 
 // ============== PARTIDO ==============
 const partidoCount = sortedEntries(countBy(aderidos, "partido"));
-new Chart(document.getElementById("chartPartido"), {
+const cPartido = new Chart(document.getElementById("chartPartido"), {
   type: "bar",
   data: {
     labels: partidoCount.map(e => e[0]),
@@ -1098,23 +1086,19 @@ new Chart(document.getElementById("chartPartido"), {
       y: { ticks: { font: { size: 11 }, autoSkip: false }, grid: { display: false } }
     },
     plugins: {
-      legend: { display: false },
-      datalabels: {
-        display: true,
-        anchor: "end", align: "end", offset: 4,
-        color: "#1F2937", font: { weight: "700", size: 11 },
-        formatter: (v) => {
-          const n = typeof v === "number" ? v : (v && (v.x ?? v.y)) ?? 0;
-          return n > 0 ? n : "";
-        }
-      }
+      legend: { display: false }
     }
   }
+});
+setChartLabels(cPartido, {
+  display: true, anchor: "end", align: "end", offset: 4,
+  color: "#1F2937", font: { weight: "700", size: 11 },
+  formatter: (n) => n > 0 ? n : ""
 });
 
 // ============== RANKING PARLAMENTARES ==============
 const ranking = DATA.filter(d => d.veiculados > 0).sort((a,b) => b.veiculados - a.veiculados);
-new Chart(document.getElementById("chartRankingParlamentares"), {
+const cRankPar = new Chart(document.getElementById("chartRankingParlamentares"), {
   type: "bar",
   data: {
     labels: ranking.map(d => `${d.nome} (${d.uf}/${d.partido})`),
@@ -1140,24 +1124,20 @@ new Chart(document.getElementById("chartRankingParlamentares"), {
     },
     plugins: {
       legend: { display: false },
-      datalabels: {
-        display: true,
-        anchor: "end", align: "end", offset: 4,
-        color: "#1F2937", font: { weight: "700", size: 12 },
-        formatter: (v) => {
-          const n = typeof v === "number" ? v : (v && (v.x ?? v.y)) ?? 0;
-          return n > 0 ? n : "";
-        }
-      },
       tooltip: { callbacks: { label: (ctx) => `${ctx.parsed.x} peças veiculadas` } }
     }
   }
+});
+setChartLabels(cRankPar, {
+  display: true, anchor: "end", align: "end", offset: 4,
+  color: "#1F2937", font: { weight: "700", size: 12 },
+  formatter: (n) => n > 0 ? n : ""
 });
 
 // ============== RANKING ESTADOS - ADERIDOS (absoluto) ==============
 const ufAderidosCount = countBy(aderidos, "uf");
 const ufRankingAderidos = sortedEntries(ufAderidosCount).slice(0, 12);
-new Chart(document.getElementById("chartRankingUFAderidos"), {
+const cUFAder = new Chart(document.getElementById("chartRankingUFAderidos"), {
   type: "bar",
   data: {
     labels: ufRankingAderidos.map(e => `${e[0]} · ${UF_NOMES[e[0]]}`),
@@ -1183,18 +1163,14 @@ new Chart(document.getElementById("chartRankingUFAderidos"), {
       y: { ticks: { font: { size: 11 }, autoSkip: false }, grid: { display: false } }
     },
     plugins: {
-      legend: { display: false },
-      datalabels: {
-        display: true,
-        anchor: "end", align: "end", offset: 4,
-        color: "#1F2937", font: { weight: "700", size: 12 },
-        formatter: (v) => {
-          const n = typeof v === "number" ? v : (v && (v.x ?? v.y)) ?? 0;
-          return n > 0 ? n : "";
-        }
-      }
+      legend: { display: false }
     }
   }
+});
+setChartLabels(cUFAder, {
+  display: true, anchor: "end", align: "end", offset: 4,
+  color: "#1F2937", font: { weight: "700", size: 12 },
+  formatter: (n) => n > 0 ? n : ""
 });
 
 // ============== RANKING ESTADOS - TAXA DE CONVERSÃO ==============
@@ -1209,7 +1185,7 @@ const ufConversao = Object.keys(ufTotalCount)
   .filter(x => x.total >= 2)
   .sort((a,b) => b.pct - a.pct)
   .slice(0, 12);
-new Chart(document.getElementById("chartRankingUFConversao"), {
+const cUFConv = new Chart(document.getElementById("chartRankingUFConversao"), {
   type: "bar",
   data: {
     labels: ufConversao.map(x => `${x.uf} · ${x.aderidos}/${x.total}`),
@@ -1236,15 +1212,6 @@ new Chart(document.getElementById("chartRankingUFConversao"), {
     },
     plugins: {
       legend: { display: false },
-      datalabels: {
-        display: true,
-        anchor: "end", align: "end", offset: 4,
-        color: "#1F2937", font: { weight: "700", size: 12 },
-        formatter: (v) => {
-          const n = typeof v === "number" ? v : (v && (v.x ?? v.y)) ?? 0;
-          return n.toFixed(0) + "%";
-        }
-      },
       tooltip: {
         callbacks: {
           label: (ctx) => {
@@ -1255,6 +1222,11 @@ new Chart(document.getElementById("chartRankingUFConversao"), {
       }
     }
   }
+});
+setChartLabels(cUFConv, {
+  display: true, anchor: "end", align: "end", offset: 4,
+  color: "#1F2937", font: { weight: "700", size: 12 },
+  formatter: (n) => Math.round(n) + "%"
 });
 
 // ============== MAPA DO BRASIL ==============
