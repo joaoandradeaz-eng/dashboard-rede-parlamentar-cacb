@@ -409,7 +409,7 @@
   <!-- Funil -->
   <section class="chart-card">
     <h3>Funil de conversão</h3>
-    <div class="chart-wrap" style="height: 380px;"><canvas id="chartFunnel"></canvas></div>
+    <div class="chart-wrap" style="height: 540px;"><canvas id="chartFunnel"></canvas></div>
   </section>
 
   <h2 class="section-title">Aderidos — Detalhamento</h2>
@@ -741,8 +741,9 @@ new Chart(document.getElementById("chartFunnel"), {
       data: funnelData.map(s => s.count),
       backgroundColor: funnelData.map(s => s.color),
       borderRadius: 6,
-      barPercentage: 0.75,
-      categoryPercentage: 0.88
+      barPercentage: 0.95,
+      categoryPercentage: 0.96,
+      minBarLength: 12
     }]
   },
   options: {
@@ -754,6 +755,7 @@ new Chart(document.getElementById("chartFunnel"), {
       const s = funnelData[els[0].index];
       setTableSubset(namesWhere(s.filter), `${s.label} — ${s.desc}`);
     },
+    layout: { padding: { top: 28, right: 12, bottom: 8, left: 12 } },
     scales: {
       x: {
         grid: { display: false },
@@ -761,7 +763,8 @@ new Chart(document.getElementById("chartFunnel"), {
       },
       y: {
         beginAtZero: true,
-        ticks: { precision: 0, font: { size: 11 } },
+        grace: "8%",
+        ticks: { precision: 0, font: { size: 11 }, stepSize: 5 },
         grid: { color: "#E5E7EB" }
       }
     },
