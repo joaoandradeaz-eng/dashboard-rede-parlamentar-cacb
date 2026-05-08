@@ -12,10 +12,10 @@
     --primary: #365F91;
     --primary-dark: #1F3864;
     --secondary: #4F81BD;
-    --aderido: #4CAF50;
-    --quente: #E36C0A;
-    --agendado: #4F81BD;
-    --aberto: #B0B0B0;
+    --aderido: #3B82F6;
+    --quente: #FBBF24;
+    --agendado: #CA8A04;
+    --aberto: #A8A29E;
     --bg: #F5F6F8;
     --card: #FFFFFF;
     --text: #1F2937;
@@ -533,7 +533,7 @@
 // ============== DADOS ==============
 const DATA = [
   {nome:"Adriana Ventura",mf:"F",cargo:"Deputado Federal",partido:"NOVO",uf:"SP",situacao:"Aderido",gravacao:"Sim",veiculados:2,status:"Rodando"},
-  {nome:"Aguinaldo Ribeiro",mf:"M",cargo:"Deputado Federal",partido:"PP",uf:"PB",situacao:"Quente",gravacao:"-",veiculados:0,status:"Agenda"},
+  {nome:"Aguinaldo Ribeiro",mf:"M",cargo:"Deputado Federal",partido:"PP",uf:"PB",situacao:"Quente",gravacao:"-",veiculados:0,status:"Tentando Agenda"},
   {nome:"Alexandre Guimarães",mf:"M",cargo:"Deputado Federal",partido:"MDB",uf:"TO",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Pendência Parlamentar"},
   {nome:"Aliel Machado",mf:"M",cargo:"Deputado Federal",partido:"PV",uf:"PR",situacao:"Quente",gravacao:"-",veiculados:0,status:"Em despacho"},
   {nome:"Altineu Côrtes",mf:"M",cargo:"Deputado Federal",partido:"PL",uf:"RJ",situacao:"Agendado",gravacao:"-",veiculados:0,status:"-"},
@@ -542,16 +542,16 @@ const DATA = [
   {nome:"André Moura",mf:"M",cargo:"Ex-Deputado Federal",partido:"União",uf:"SE",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"André Teixeira Filho",mf:"M",cargo:"Secretário Estadual",partido:"PSD",uf:"PE",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Antônia Lúcia",mf:"F",cargo:"Deputado Federal",partido:"MDB",uf:"AC",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
-  {nome:"Antonio Brito",mf:"M",cargo:"Deputado Federal",partido:"PSD",uf:"BA",situacao:"Quente",gravacao:"-",veiculados:0,status:"Agenda"},
+  {nome:"Antonio Brito",mf:"M",cargo:"Deputado Federal",partido:"PSD",uf:"BA",situacao:"Quente",gravacao:"-",veiculados:0,status:"Tentando Agenda"},
   {nome:"Any Ortiz",mf:"F",cargo:"Deputado Federal",partido:"Cidadania",uf:"RS",situacao:"Aderido",gravacao:"Sim",veiculados:3,status:"Rodando"},
-  {nome:"Arnaldo Jardim",mf:"M",cargo:"Deputado Federal",partido:"Cidadania",uf:"SP",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Agenda"},
+  {nome:"Arnaldo Jardim",mf:"M",cargo:"Deputado Federal",partido:"Cidadania",uf:"SP",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Tentando Gravação"},
   {nome:"Arthur Oliveira Maia",mf:"M",cargo:"Deputado Federal",partido:"União",uf:"BA",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Átila Lins",mf:"M",cargo:"Deputado Federal",partido:"PSD",uf:"AM",situacao:"Quente",gravacao:"-",veiculados:0,status:"Em despacho"},
   {nome:"Átila Lira",mf:"M",cargo:"Deputado Federal",partido:"PP",uf:"PI",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Aureo Ribeiro",mf:"M",cargo:"Deputado Federal",partido:"Solidariedade",uf:"RJ",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Beto Richa",mf:"M",cargo:"Deputado Federal",partido:"PSDB",uf:"PR",situacao:"Aderido",gravacao:"Sim",veiculados:1,status:"Rodando"},
   {nome:"Bia Kicis",mf:"F",cargo:"Deputado Federal",partido:"PL",uf:"DF",situacao:"Aderido",gravacao:"Sim",veiculados:2,status:"Rodando"},
-  {nome:"Carla Dickson",mf:"F",cargo:"Deputado Federal",partido:"PL",uf:"RN",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Agenda"},
+  {nome:"Carla Dickson",mf:"F",cargo:"Deputado Federal",partido:"PL",uf:"RN",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Tentando Gravação"},
   {nome:"Carlos Sampaio",mf:"M",cargo:"Deputado Federal",partido:"PSD",uf:"SP",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Cristiane Britto",mf:"F",cargo:"Ex-Ministra da Mulher",partido:"Republicanos",uf:"DF",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Realinhamento"},
   {nome:"Da Vitoria",mf:"M",cargo:"Deputado Federal",partido:"PP",uf:"ES",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
@@ -560,18 +560,18 @@ const DATA = [
   {nome:"Darci de Matos",mf:"M",cargo:"Ex-Deputado Federal",partido:"PSD",uf:"SC",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Delegado André David",mf:"M",cargo:"Secretário Municipal",partido:"Republicanos",uf:"SE",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Delegado da Cunha",mf:"M",cargo:"Deputado Federal",partido:"PP",uf:"SP",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
-  {nome:"Diego Garcia",mf:"M",cargo:"Deputado Federal",partido:"Republicanos",uf:"PR",situacao:"Aderido",gravacao:"Sim",veiculados:0,status:"Gravado, ainda não veiculado"},
+  {nome:"Diego Garcia",mf:"M",cargo:"Deputado Federal",partido:"Republicanos",uf:"PR",situacao:"Aderido",gravacao:"Sim",veiculados:0,status:"Gravado, Pendente Veiculação"},
   {nome:"Domingos Neto",mf:"M",cargo:"Deputado Federal",partido:"PSD",uf:"CE",situacao:"Aderido",gravacao:"Sim",veiculados:1,status:"Rodando"},
   {nome:"Domingos Sávio",mf:"M",cargo:"Deputado Federal",partido:"PL",uf:"MG",situacao:"Aderido",gravacao:"Sim",veiculados:12,status:"Rodando"},
   {nome:"Doutor Luizinho",mf:"M",cargo:"Deputado Federal",partido:"PP",uf:"RJ",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
-  {nome:"Dr. Daniel Soranz",mf:"M",cargo:"Deputado Federal",partido:"PSD",uf:"RJ",situacao:"Quente",gravacao:"-",veiculados:0,status:"Pendência CACB"},
-  {nome:"Dr. Fernando Máximo",mf:"M",cargo:"Deputado Federal",partido:"União",uf:"RO",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Agenda"},
-  {nome:"Duda Ramos",mf:"M",cargo:"Deputado Federal",partido:"MDB",uf:"RR",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Agenda"},
+  {nome:"Dr. Daniel Soranz",mf:"M",cargo:"Deputado Federal",partido:"PSD",uf:"RJ",situacao:"Quente",gravacao:"-",veiculados:0,status:"Tentando Agenda"},
+  {nome:"Dr. Fernando Máximo",mf:"M",cargo:"Deputado Federal",partido:"União",uf:"RO",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Tentando Gravação"},
+  {nome:"Duda Ramos",mf:"M",cargo:"Deputado Federal",partido:"MDB",uf:"RR",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Tentando Gravação"},
   {nome:"Eduardo Velloso",mf:"M",cargo:"Deputado Federal",partido:"União",uf:"AC",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Eli Borges",mf:"M",cargo:"Deputado Federal",partido:"PL",uf:"TO",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Euclydes Pettersen",mf:"M",cargo:"Deputado Federal",partido:"Republicanos",uf:"MG",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Evair Vieira de Melo",mf:"M",cargo:"Deputado Federal",partido:"PP",uf:"ES",situacao:"Aderido",gravacao:"Sim",veiculados:1,status:"Rodando"},
-  {nome:"Fabio Garcia",mf:"M",cargo:"Deputado Federal",partido:"União",uf:"MT",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Agenda"},
+  {nome:"Fabio Garcia",mf:"M",cargo:"Deputado Federal",partido:"União",uf:"MT",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Tentando Gravação"},
   {nome:"Fabio Lopes",mf:"M",cargo:"Vereador",partido:"PL",uf:"PB",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Fátima Pelaes",mf:"F",cargo:"Deputado Federal",partido:"Republicanos",uf:"AP",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Fernando Braide",mf:"M",cargo:"Deputado Estadual",partido:"PSB",uf:"MA",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
@@ -579,9 +579,9 @@ const DATA = [
   {nome:"Franco Cartafina",mf:"M",cargo:"Ex-Deputado Federal",partido:"PP",uf:"MG",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Gerlane Baccarin",mf:"F",cargo:"Primeira-Dama Est. RR",partido:"PP",uf:"RR",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Gisela Simona",mf:"F",cargo:"Deputado Federal",partido:"União",uf:"MT",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Realinhamento"},
-  {nome:"Greyce Elias",mf:"F",cargo:"Deputado Federal",partido:"Avante",uf:"MG",situacao:"Aderido",gravacao:"Sim",veiculados:0,status:"Gravado, ainda não veiculado"},
+  {nome:"Greyce Elias",mf:"F",cargo:"Deputado Federal",partido:"Avante",uf:"MG",situacao:"Aderido",gravacao:"Sim",veiculados:0,status:"Gravado, Pendente Veiculação"},
   {nome:"Hercílio Coelho Diniz",mf:"M",cargo:"Deputado Federal",partido:"MDB",uf:"MG",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
-  {nome:"Hildo Rocha",mf:"M",cargo:"Deputado Federal",partido:"MDB",uf:"MA",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Agenda"},
+  {nome:"Hildo Rocha",mf:"M",cargo:"Deputado Federal",partido:"MDB",uf:"MA",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Tentando Gravação"},
   {nome:"Hugo Leal",mf:"M",cargo:"Deputado Federal",partido:"PSD",uf:"RJ",situacao:"Aderido",gravacao:"Sim",veiculados:2,status:"Rodando"},
   {nome:"Isnaldo Bulhões Jr.",mf:"M",cargo:"Deputado Federal",partido:"MDB",uf:"AL",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Jaime Verruck",mf:"M",cargo:"Secretário Estadual",partido:"PSD",uf:"MS",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
@@ -589,12 +589,12 @@ const DATA = [
   {nome:"Joaquim Passarinho",mf:"M",cargo:"Deputado Federal",partido:"PL",uf:"PA",situacao:"Aderido",gravacao:"Sim",veiculados:7,status:"Rodando"},
   {nome:"Jonas Donizette",mf:"M",cargo:"Deputado Federal",partido:"PSB",uf:"SP",situacao:"Agendado",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Jorge Goetten",mf:"M",cargo:"Deputado Federal",partido:"Republicanos",uf:"SC",situacao:"Aderido",gravacao:"Sim",veiculados:4,status:"Rodando"},
-  {nome:"Julia Zanatta",mf:"F",cargo:"Deputado Federal",partido:"PL",uf:"SC",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Agenda"},
-  {nome:"Julio Cesar Ribeiro",mf:"M",cargo:"Deputado Federal",partido:"Republicanos",uf:"DF",situacao:"Quente",gravacao:"-",veiculados:0,status:"Agenda"},
+  {nome:"Julia Zanatta",mf:"F",cargo:"Deputado Federal",partido:"PL",uf:"SC",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Tentando Gravação"},
+  {nome:"Julio Cesar Ribeiro",mf:"M",cargo:"Deputado Federal",partido:"Republicanos",uf:"DF",situacao:"Quente",gravacao:"-",veiculados:0,status:"Tentando Agenda"},
   {nome:"Julio Lopes",mf:"M",cargo:"Deputado Federal",partido:"PP",uf:"RJ",situacao:"Aderido",gravacao:"Sim",veiculados:2,status:"Rodando"},
   {nome:"Júnior Ferrari",mf:"M",cargo:"Deputado Federal",partido:"PSD",uf:"PA",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Juscelino Filho",mf:"M",cargo:"Deputado Federal",partido:"União",uf:"MA",situacao:"Quente",gravacao:"-",veiculados:0,status:"Em despacho"},
-  {nome:"Lêda Borges",mf:"F",cargo:"Deputado Federal",partido:"PSDB",uf:"GO",situacao:"Quente",gravacao:"-",veiculados:0,status:"Agenda"},
+  {nome:"Lêda Borges",mf:"F",cargo:"Deputado Federal",partido:"PSDB",uf:"GO",situacao:"Quente",gravacao:"-",veiculados:0,status:"Tentando Agenda"},
   {nome:"Levi Oliveira",mf:"M",cargo:"Vereador",partido:"PP",uf:"SE",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Lucas do Vale",mf:"M",cargo:"Deputado Estadual",partido:"MDB",uf:"GO",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Lucas Vergílio",mf:"M",cargo:"Vereador",partido:"MDB",uf:"GO",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
@@ -602,18 +602,18 @@ const DATA = [
   {nome:"Luciano Azevedo",mf:"M",cargo:"Ex-Deputado Federal",partido:"PSD",uf:"RS",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Luiz Carlos Hauly",mf:"M",cargo:"Deputado Federal",partido:"Podemos",uf:"PR",situacao:"Quente",gravacao:"-",veiculados:0,status:"Em despacho"},
   {nome:"Luiz Gastão",mf:"M",cargo:"Deputado Federal",partido:"PSD",uf:"CE",situacao:"Aderido",gravacao:"Sim",veiculados:4,status:"Rodando"},
-  {nome:"Luiz Philippe de Orleans e Bragança",mf:"M",cargo:"Deputado Federal",partido:"PL",uf:"SP",situacao:"Quente",gravacao:"-",veiculados:0,status:"Agenda"},
+  {nome:"Luiz Philippe de Orleans e Bragança",mf:"M",cargo:"Deputado Federal",partido:"PL",uf:"SP",situacao:"Quente",gravacao:"-",veiculados:0,status:"Tentando Agenda"},
   {nome:"Marangoni [Fernando]",mf:"M",cargo:"Deputado Federal",partido:"União",uf:"SP",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Temas"},
   {nome:"Marcel van Hattem",mf:"M",cargo:"Deputado Federal",partido:"NOVO",uf:"RS",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
-  {nome:"Marcelo Queiroz",mf:"M",cargo:"Deputado Federal",partido:"PSDB",uf:"RJ",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Agenda"},
+  {nome:"Marcelo Queiroz",mf:"M",cargo:"Deputado Federal",partido:"PSDB",uf:"RJ",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Tentando Gravação"},
   {nome:"Marussa Boldrin",mf:"F",cargo:"Deputado Federal",partido:"MDB",uf:"GO",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Temas"},
   {nome:"Mauro Benevides Filho",mf:"M",cargo:"Deputado Federal",partido:"PDT",uf:"CE",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Mendonça Filho",mf:"M",cargo:"Deputado Federal",partido:"União",uf:"PE",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Messias Donato",mf:"M",cargo:"Deputado Federal",partido:"Republicanos",uf:"ES",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Orlando Morando",mf:"M",cargo:"Secretário Municipal",partido:"MDB",uf:"SP",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
-  {nome:"Osmar Terra",mf:"M",cargo:"Deputado Federal",partido:"PL",uf:"RS",situacao:"Quente",gravacao:"-",veiculados:0,status:"Agenda"},
+  {nome:"Osmar Terra",mf:"M",cargo:"Deputado Federal",partido:"PL",uf:"RS",situacao:"Quente",gravacao:"-",veiculados:0,status:"Tentando Agenda"},
   {nome:"Paulo Alexandre Barbosa",mf:"M",cargo:"Deputado Federal",partido:"PSDB",uf:"SP",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
-  {nome:"Paulo Bengtson",mf:"M",cargo:"Ex-Deputado Federal",partido:"PTB",uf:"PA",situacao:"Quente",gravacao:"-",veiculados:0,status:"Agenda"},
+  {nome:"Paulo Bengtson",mf:"M",cargo:"Ex-Deputado Federal",partido:"PTB",uf:"PA",situacao:"Quente",gravacao:"-",veiculados:0,status:"Tentando Agenda"},
   {nome:"Paulo Serra",mf:"M",cargo:"Ex-Prefeito",partido:"PSDB",uf:"SP",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Pedro Lucas Fernandes",mf:"M",cargo:"Deputado Federal",partido:"União",uf:"MA",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Pedro Lupion",mf:"M",cargo:"Deputado Federal",partido:"Republicanos",uf:"PR",situacao:"Aderido",gravacao:"Sim",veiculados:1,status:"Rodando"},
@@ -622,27 +622,27 @@ const DATA = [
   {nome:"Rafael Prudente",mf:"M",cargo:"Deputado Federal",partido:"MDB",uf:"DF",situacao:"Agendado",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Regina Nunes",mf:"F",cargo:"Primeira-Dama Mun. SP",partido:"MDB",uf:"SP",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Roberto Duarte",mf:"M",cargo:"Deputado Federal",partido:"Republicanos",uf:"AC",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
-  {nome:"Robinson Faria",mf:"M",cargo:"Deputado Federal",partido:"PP",uf:"RN",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Agenda"},
+  {nome:"Robinson Faria",mf:"M",cargo:"Deputado Federal",partido:"PP",uf:"RN",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Tentando Gravação"},
   {nome:"Rodrigo da Zaeli",mf:"M",cargo:"Deputado Federal",partido:"PL",uf:"MT",situacao:"Aderido",gravacao:"Sim",veiculados:1,status:"Rodando"},
   {nome:"Rodrigo Melo [Tenente Melo]",mf:"M",cargo:"Ex-Vereador",partido:"NOVO",uf:"MG",situacao:"Aderido",gravacao:"Sim",veiculados:1,status:"Rodando"},
   {nome:"Rodrigo Valadares",mf:"M",cargo:"Deputado Federal",partido:"União",uf:"SE",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Rosana Valle",mf:"F",cargo:"Deputado Federal",partido:"PL",uf:"SP",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Temas"},
-  {nome:"Rosângela Gomes",mf:"F",cargo:"Deputado Federal",partido:"Republicanos",uf:"RJ",situacao:"Quente",gravacao:"-",veiculados:0,status:"Agenda"},
-  {nome:"Sargento Gonçalves",mf:"M",cargo:"Deputado Federal",partido:"PL",uf:"RN",situacao:"Quente",gravacao:"-",veiculados:0,status:"Agenda"},
-  {nome:"Sidney Leite",mf:"M",cargo:"Deputado Federal",partido:"PSD",uf:"AM",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Agenda"},
+  {nome:"Rosângela Gomes",mf:"F",cargo:"Deputado Federal",partido:"Republicanos",uf:"RJ",situacao:"Quente",gravacao:"-",veiculados:0,status:"Tentando Agenda"},
+  {nome:"Sargento Gonçalves",mf:"M",cargo:"Deputado Federal",partido:"PL",uf:"RN",situacao:"Quente",gravacao:"-",veiculados:0,status:"Tentando Agenda"},
+  {nome:"Sidney Leite",mf:"M",cargo:"Deputado Federal",partido:"PSD",uf:"AM",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Tentando Gravação"},
   {nome:"Silas Câmara",mf:"M",cargo:"Deputado Federal",partido:"Republicanos",uf:"AM",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Silvia Cristina",mf:"F",cargo:"Deputado Federal",partido:"PP",uf:"RO",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Temas"},
-  {nome:"Soraya Santos",mf:"F",cargo:"Deputado Federal",partido:"PL",uf:"RJ",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Agenda"},
+  {nome:"Soraya Santos",mf:"F",cargo:"Deputado Federal",partido:"PL",uf:"RJ",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Tentando Gravação"},
   {nome:"Thiago de Joaldo",mf:"M",cargo:"Deputado Federal",partido:"PP",uf:"SE",situacao:"Aderido",gravacao:"Sim",veiculados:1,status:"Rodando"},
   {nome:"Thiago Flores",mf:"M",cargo:"Deputado Federal",partido:"Republicanos",uf:"RO",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Tiago Dimas",mf:"M",cargo:"Deputado Federal",partido:"Podemos",uf:"TO",situacao:"Aderido",gravacao:"Sim",veiculados:1,status:"Rodando"},
   {nome:"Vermelho [Nelsi Coguetto Maria]",mf:"M",cargo:"Deputado Federal",partido:"PP",uf:"PR",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
   {nome:"Wellington Roberto",mf:"M",cargo:"Deputado Federal",partido:"PL",uf:"PB",situacao:"Aberto",gravacao:"-",veiculados:0,status:"-"},
-  {nome:"Yandra Moura",mf:"F",cargo:"Deputado Federal",partido:"União",uf:"SE",situacao:"Quente",gravacao:"-",veiculados:0,status:"On hold"},
+  {nome:"Yandra Moura",mf:"F",cargo:"Deputado Federal",partido:"União",uf:"SE",situacao:"Quente",gravacao:"-",veiculados:0,status:"Tentando Agenda"},
   {nome:"Zé Adriano",mf:"M",cargo:"Deputado Federal",partido:"PP",uf:"AC",situacao:"Aderido",gravacao:"Sim",veiculados:2,status:"Rodando"},
   {nome:"Zé Haroldo Cathedral",mf:"M",cargo:"Deputado Federal",partido:"PSD",uf:"RR",situacao:"Quente",gravacao:"-",veiculados:0,status:"Em despacho"},
   {nome:"Zé Neto",mf:"M",cargo:"Deputado Federal",partido:"PT",uf:"BA",situacao:"Aderido",gravacao:"Sim",veiculados:1,status:"Rodando"},
-  {nome:"Zé Vitor",mf:"M",cargo:"Deputado Federal",partido:"PL",uf:"MG",situacao:"Aderido",gravacao:"Sim",veiculados:0,status:"Gravado, ainda não veiculado"},
+  {nome:"Zé Vitor",mf:"M",cargo:"Deputado Federal",partido:"PL",uf:"MG",situacao:"Aderido",gravacao:"Sim",veiculados:0,status:"Gravado, Pendente Veiculação"},
   {nome:"Benes Leocádio",mf:"M",cargo:"Deputado Federal",partido:"União",uf:"RN",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Temas"},
   {nome:"Luis Carlos Gomes",mf:"M",cargo:"Deputado Federal",partido:"Republicanos",uf:"RJ",situacao:"Quente",gravacao:"Não",veiculados:0,status:"Em despacho"},
   {nome:"Efraim Filho",mf:"M",cargo:"Senador",partido:"PL",uf:"PB",situacao:"Aderido",gravacao:"Sim",veiculados:3,status:"Rodando"},
@@ -651,12 +651,12 @@ const DATA = [
 
 const UF_NOMES = {AC:"Acre",AL:"Alagoas",AM:"Amazonas",AP:"Amapá",BA:"Bahia",CE:"Ceará",DF:"Distrito Federal",ES:"Espírito Santo",GO:"Goiás",MA:"Maranhão",MG:"Minas Gerais",MS:"Mato Grosso do Sul",MT:"Mato Grosso",PA:"Pará",PB:"Paraíba",PE:"Pernambuco",PI:"Piauí",PR:"Paraná",RJ:"Rio de Janeiro",RN:"Rio Grande do Norte",RO:"Rondônia",RR:"Roraima",RS:"Rio Grande do Sul",SC:"Santa Catarina",SE:"Sergipe",SP:"São Paulo",TO:"Tocantins"};
 
-const COR = {Aderido:"#10B981", Quente:"#F59E0B", Agendado:"#4F81BD", Aberto:"#94A3B8"};
+const COR = {Aderido:"#3B82F6", Quente:"#FBBF24", Agendado:"#CA8A04", Aberto:"#A8A29E"};
 const COR_STATUS = {
   "Rodando":                       "#10B981",
-  "Agenda":                        "#1E40AF",
+  "Tentando Gravação":             "#1E40AF",
   "Temas":                         "#3B82F6",
-  "Gravado, ainda não veiculado":  "#60A5FA",
+  "Gravado, Pendente Veiculação":  "#60A5FA",
   "Realinhamento":                 "#93C5FD",
   "Pendência Parlamentar":         "#94A3B8"
 };
@@ -721,12 +721,12 @@ const aderidosGravaramN = aderidos.filter(d => d.gravacao === "Sim").length;
 const veiculadosN = DATA.filter(d => d.veiculados > 0).length;
 
 const funnelData = [
-  { key:"Aberto",     label:"ABERTO",     desc:"Prospecção fria",                count: funilCount.Aberto || 0,    color:["#94A3B8","#475569"], filter: d => d.situacao === "Aberto"   },
-  { key:"Quente",     label:"QUENTE",     desc:"Prospecção quente",              count: funilCount.Quente || 0,    color:["#FBBF24","#B45309"], filter: d => d.situacao === "Quente"   },
-  { key:"Agendado",   label:"AGENDADO",   desc:"Reunião confirmada na agenda",   count: funilCount.Agendado || 0,  color:["#60A5FA","#1E40AF"], filter: d => d.situacao === "Agendado" },
-  { key:"Aderido",    label:"ADERIDOS",   desc:"Compromisso firmado",            count: funilCount.Aderido || 0,   color:["#34D399","#047857"], filter: d => d.situacao === "Aderido"  },
-  { key:"Gravacao",   label:"GRAVAÇÃO",   desc:"Aderidos que já gravaram",       count: aderidosGravaramN,         color:["#10B981","#065F46"], filter: d => d.situacao === "Aderido" && d.gravacao === "Sim" },
-  { key:"Veiculados", label:"VEICULADOS", desc:"Material já veiculado",          count: veiculadosN,               color:["#047857","#022C22"], filter: d => d.veiculados > 0 }
+  { key:"Aberto",     label:"ABERTO",     desc:"Prospecção fria",                count: funilCount.Aberto || 0,    color:["#A8A29E","#57534E"], filter: d => d.situacao === "Aberto"   },
+  { key:"Quente",     label:"QUENTE",     desc:"Prospecção quente",              count: funilCount.Quente || 0,    color:["#FBBF24","#A16207"], filter: d => d.situacao === "Quente"   },
+  { key:"Agendado",   label:"AGENDADO",   desc:"Reunião confirmada na agenda",   count: funilCount.Agendado || 0,  color:["#CA8A04","#713F12"], filter: d => d.situacao === "Agendado" },
+  { key:"Aderido",    label:"ADERIDOS",   desc:"Compromisso firmado",            count: funilCount.Aderido || 0,   color:["#3B82F6","#1E3A8A"], filter: d => d.situacao === "Aderido"  },
+  { key:"Gravacao",   label:"GRAVAÇÃO",   desc:"Aderidos que já gravaram",       count: aderidosGravaramN,         color:["#10B981","#047857"], filter: d => d.situacao === "Aderido" && d.gravacao === "Sim" },
+  { key:"Veiculados", label:"VEICULADOS", desc:"Material já veiculado",          count: veiculadosN,               color:["#059669","#022C22"], filter: d => d.veiculados > 0 }
 ];
 
 (function renderFunnel() {
@@ -887,9 +887,9 @@ renderProgress(
 // ============== PIPELINE DOS ADERIDOS (pizza por status) ==============
 const pipelineStages = [
   { label: "Rodando",                          status: "Rodando" },
-  { label: "Em agenda",                        status: "Agenda" },
+  { label: "Tentando gravação",                status: "Tentando Gravação" },
   { label: "Definição de temas",               status: "Temas" },
-  { label: "Gravado, aguardando veiculação",   status: "Gravado, ainda não veiculado" },
+  { label: "Gravado, pendente veiculação",     status: "Gravado, Pendente Veiculação" },
   { label: "Em realinhamento",                 status: "Realinhamento" },
   { label: "Pendência parlamentar",            status: "Pendência Parlamentar" }
 ];
@@ -1127,7 +1127,7 @@ new Chart(document.getElementById("chartRankingUFConversao"), {
     labels: ufConversao.map(x => `${x.uf} · ${x.aderidos}/${x.total}`),
     datasets: [{
       data: ufConversao.map(x => x.pct),
-      backgroundColor: "#2E5E91",
+      backgroundColor: "#047857",
       borderRadius: 4
     }]
   },
@@ -1208,10 +1208,10 @@ function renderMap(mode) {
   const vals = getValuesByUF(mode);
   const max = Math.max(...Object.values(vals), 1);
   const colorScales = {
-    aderido: d3.scaleSequential(d3.interpolateGreens).domain([0, max]),
-    quente: d3.scaleSequential(d3.interpolateOranges).domain([0, max]),
+    aderido: d3.scaleSequential(d3.interpolateBlues).domain([0, max]),
+    quente: d3.scaleSequential(d3.interpolateYlOrBr).domain([0, max]),
     total: d3.scaleSequential(d3.interpolateGreys).domain([0, max]),
-    conversao: d3.scaleSequential(d3.interpolateBlues).domain([0, 100])
+    conversao: d3.scaleSequential(d3.interpolateGreens).domain([0, 100])
   };
   const scaleColor = colorScales[mode];
 
@@ -1250,10 +1250,10 @@ function renderMap(mode) {
   document.getElementById("legendTitle").textContent = titles[mode];
   document.getElementById("scaleMax").textContent = mode === "conversao" ? "100%" : max;
   const grads = {
-    aderido:   "linear-gradient(to right, #F7FCF5, #00441B)",
-    quente:    "linear-gradient(to right, #FFF5EB, #7F2704)",
+    aderido:   "linear-gradient(to right, #F7FBFF, #08306B)",
+    quente:    "linear-gradient(to right, #FFFCE6, #662506)",
     total:     "linear-gradient(to right, #FFFFFF, #1F2937)",
-    conversao: "linear-gradient(to right, #F7FBFF, #08306B)"
+    conversao: "linear-gradient(to right, #F7FCF5, #00441B)"
   };
   document.getElementById("legendScale").style.background = grads[mode];
 
@@ -1291,9 +1291,9 @@ d3.json("https://raw.githubusercontent.com/codeforamerica/click_that_hood/master
         tooltip.innerHTML = `
           <h5>${UF_NOMES[uf] || d.properties.name} (${uf})</h5>
           <div>Total na lista: <strong>${totalUF}</strong></div>
-          <div>Aderidos: <strong style="color:#4CAF50">${aderUF}</strong></div>
-          <div>Quentes: <strong style="color:#E36C0A">${quenteUF}</strong></div>
-          <div>Conversão: <strong style="color:#1E40AF">${convUF}%</strong></div>
+          <div>Aderidos: <strong style="color:#1E40AF">${aderUF}</strong></div>
+          <div>Quentes: <strong style="color:#A16207">${quenteUF}</strong></div>
+          <div>Conversão: <strong style="color:#047857">${convUF}%</strong></div>
         `;
       })
       .on("mousemove", function(event) {
