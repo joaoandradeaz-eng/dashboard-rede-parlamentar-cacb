@@ -32,55 +32,70 @@
   .container { max-width: 1400px; margin: 0 auto; }
 
   header {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-    color: white;
-    padding: 28px 32px;
-    border-radius: 12px;
-    margin-bottom: 24px;
-    box-shadow: 0 4px 12px rgba(54, 95, 145, 0.15);
+    padding: 8px 0 4px 0;
+    margin-bottom: 4px;
   }
-  header h1 { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
-  header .subtitle { font-size: 14px; opacity: 0.9; }
+  header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #000;
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+  }
+  header .subtitle {
+    font-size: 14px;
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+  .header-divider {
+    height: 3px;
+    background: #000;
+    margin: 20px 0 0 0;
+    border: none;
+  }
 
   .kpi-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin-bottom: 24px;
+    background: white;
+    border-bottom: 3px solid #000;
+    margin-bottom: 32px;
   }
   .kpi-card {
-    background: var(--card);
-    padding: 24px;
-    border-radius: 12px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    border-left: 4px solid var(--primary);
-    position: relative;
+    background: white;
+    padding: 36px 28px;
+    border-right: 1.5px solid #000;
     cursor: pointer;
-    transition: transform 0.15s, box-shadow 0.15s;
+    transition: background 0.15s;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
-  .kpi-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-  .kpi-card.aderido { border-left-color: var(--aderido); }
-  .kpi-card.quente { border-left-color: var(--quente); }
+  .kpi-card:last-child { border-right: none; }
+  .kpi-card:hover { background: #FAFAFA; }
   .kpi-card .label {
-    font-size: 12px;
+    font-size: 13px;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--text-muted);
+    letter-spacing: 0.8px;
+    color: #000;
     font-weight: 600;
-    margin-bottom: 8px;
+    margin-bottom: 14px;
   }
   .kpi-card .value {
-    font-size: 38px;
-    font-weight: 700;
+    font-size: 56px;
+    font-weight: 300;
     line-height: 1;
-    color: var(--text);
+    color: #000;
+    letter-spacing: -2px;
   }
   .kpi-card .meta {
     font-size: 13px;
     color: var(--text-muted);
-    margin-top: 6px;
+    margin-top: 12px;
+    font-weight: 400;
   }
-  .kpi-card .meta strong { color: var(--text); }
+  .kpi-card .meta strong { color: #000; font-weight: 600; }
 
   .section-title {
     font-size: 18px;
@@ -108,6 +123,50 @@
   }
   .chart-card .chart-wrap { position: relative; height: 240px; }
   .chart-card.tall .chart-wrap { height: 320px; }
+
+  /* Progress bars */
+  .progress-block {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 4px 8px 4px;
+    cursor: pointer;
+  }
+  .progress-base {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+  .progress-bar {
+    height: 38px;
+    background: #F0F0F0;
+    border-radius: 3px;
+    position: relative;
+    overflow: visible;
+  }
+  .progress-fill {
+    height: 100%;
+    background: #1F2937;
+    border-radius: 3px 0 0 3px;
+    transition: width 0.6s ease-out;
+  }
+  .progress-marker {
+    position: absolute;
+    top: -6px;
+    bottom: -6px;
+    width: 3px;
+    background: #C0504D;
+    transition: left 0.6s ease-out;
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 13px;
+    margin-top: 12px;
+  }
+  .progress-label .percent { font-weight: 700; font-size: 28px; color: #000; line-height: 1; }
+  .progress-label .frac { color: var(--text-muted); }
 
   /* Funil */
   .funnel { display: flex; flex-direction: column; gap: 6px; }
@@ -301,24 +360,25 @@
   <header>
     <h1>Rede Parlamentar CACB</h1>
     <div class="subtitle">Dashboard de acompanhamento — atualizado em 08/05/2026</div>
+    <hr class="header-divider">
   </header>
 
   <!-- KPIs -->
   <section class="kpi-grid">
     <div class="kpi-card" id="kpiTotal">
-      <div class="label">Tamanho da lista de ataque</div>
+      <div class="label">Lista de ataque</div>
       <div class="value" id="kpi-total">—</div>
-      <div class="meta">Todos os deputados mapeados</div>
+      <div class="meta">Parlamentares mapeados</div>
     </div>
-    <div class="kpi-card aderido" id="kpiAderidos">
+    <div class="kpi-card" id="kpiAderidos">
       <div class="label">Aderidos</div>
       <div class="value" id="kpi-aderidos">—</div>
       <div class="meta"><strong id="kpi-aderidos-pct">—</strong> da lista total</div>
     </div>
-    <div class="kpi-card quente" id="kpiQuentes">
-      <div class="label">Quentes</div>
-      <div class="value" id="kpi-quentes">—</div>
-      <div class="meta"><strong id="kpi-quentes-pct">—</strong> da lista total</div>
+    <div class="kpi-card" id="kpiVeiculados">
+      <div class="label">Já veiculados</div>
+      <div class="value" id="kpi-veiculados">—</div>
+      <div class="meta"><strong id="kpi-veiculados-total">—</strong> peças no ar</div>
     </div>
   </section>
 
@@ -334,11 +394,11 @@
   <section class="grid-2">
     <div class="chart-card">
       <h3>Já gravou?</h3>
-      <div class="chart-wrap"><canvas id="chartGravacao"></canvas></div>
+      <div class="progress-block" id="progressGravou"></div>
     </div>
     <div class="chart-card">
       <h3>Já veiculamos?</h3>
-      <div class="chart-wrap"><canvas id="chartVeiculacao"></canvas></div>
+      <div class="progress-block" id="progressVeiculou"></div>
     </div>
   </section>
 
@@ -364,6 +424,26 @@
     </div>
   </section>
 
+  <h2 class="section-title">Rankings de engajamento</h2>
+
+  <!-- Ranking Parlamentares -->
+  <section class="chart-card">
+    <h3>Parlamentares com mais peças veiculadas</h3>
+    <div class="chart-wrap" style="height: 520px;"><canvas id="chartRankingParlamentares"></canvas></div>
+  </section>
+
+  <!-- Ranking Estados -->
+  <section class="grid-2" style="margin-top: 16px;">
+    <div class="chart-card">
+      <h3>Top estados — número de aderidos</h3>
+      <div class="chart-wrap" style="height: 360px;"><canvas id="chartRankingUFAderidos"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>Top estados — taxa de conversão (aderidos / lista)</h3>
+      <div class="chart-wrap" style="height: 360px;"><canvas id="chartRankingUFConversao"></canvas></div>
+    </div>
+  </section>
+
   <!-- Mapa -->
   <section class="chart-card map-card" style="margin-top: 16px;">
     <h3>Distribuição geográfica</h3>
@@ -371,6 +451,7 @@
       <button class="pill active" data-mode="aderido">Aderidos</button>
       <button class="pill" data-mode="quente">Quentes</button>
       <button class="pill" data-mode="total">Total da lista</button>
+      <button class="pill" data-mode="conversao">Taxa de conversão</button>
     </div>
     <div class="map-wrap">
       <svg id="brazilMap"></svg>
@@ -540,8 +621,8 @@ const DATA = [
   {nome:"Zé Vitor",mf:"M",cargo:"Deputado Federal",partido:"PL",uf:"MG",situacao:"Aderido",gravacao:"Sim",veiculados:0,status:"Gravado, ainda não veiculado"},
   {nome:"Benes Leocádio",mf:"M",cargo:"Deputado Federal",partido:"União",uf:"RN",situacao:"Aderido",gravacao:"Não",veiculados:0,status:"Temas"},
   {nome:"Luis Carlos Gomes",mf:"M",cargo:"Deputado Federal",partido:"Republicanos",uf:"RJ",situacao:"Quente",gravacao:"Não",veiculados:0,status:"Em despacho"},
-  {nome:"Efraim Filho",mf:"M",cargo:"Senador",partido:"União",uf:"PB",situacao:"Aderido",gravacao:"Sim",veiculados:3,status:"-"},
-  {nome:"André Amaral Filho",mf:"M",cargo:"Deputado Federal",partido:"PROS",uf:"PB",situacao:"Aderido",gravacao:"Sim",veiculados:1,status:"-"}
+  {nome:"Efraim Filho",mf:"M",cargo:"Senador",partido:"PL",uf:"PB",situacao:"Aderido",gravacao:"Sim",veiculados:3,status:"-"},
+  {nome:"André Amaral Filho",mf:"M",cargo:"Ex-Deputado Federal",partido:"União",uf:"PB",situacao:"Aderido",gravacao:"Sim",veiculados:1,status:"-"}
 ];
 
 const UF_NOMES = {AC:"Acre",AL:"Alagoas",AM:"Amazonas",AP:"Amapá",BA:"Bahia",CE:"Ceará",DF:"Distrito Federal",ES:"Espírito Santo",GO:"Goiás",MA:"Maranhão",MG:"Minas Gerais",MS:"Mato Grosso do Sul",MT:"Mato Grosso",PA:"Pará",PB:"Paraíba",PE:"Pernambuco",PI:"Piauí",PR:"Paraná",RJ:"Rio de Janeiro",RN:"Rio Grande do Norte",RO:"Rondônia",RR:"Roraima",RS:"Rio Grande do Sul",SC:"Santa Catarina",SE:"Sergipe",SP:"São Paulo",TO:"Tocantins"};
@@ -562,12 +643,14 @@ function sortedEntries(obj) {
 const total = DATA.length;
 const aderidos = DATA.filter(d => d.situacao === "Aderido");
 const quentes = DATA.filter(d => d.situacao === "Quente");
+const comVeiculados = DATA.filter(d => d.veiculados > 0);
+const totalVeiculacoes = DATA.reduce((s, d) => s + (d.veiculados || 0), 0);
 
 document.getElementById("kpi-total").textContent = total;
 document.getElementById("kpi-aderidos").textContent = aderidos.length;
-document.getElementById("kpi-quentes").textContent = quentes.length;
-document.getElementById("kpi-aderidos-pct").textContent = ((aderidos.length / total) * 100).toFixed(1) + "%";
-document.getElementById("kpi-quentes-pct").textContent = ((quentes.length / total) * 100).toFixed(1) + "%";
+document.getElementById("kpi-veiculados").textContent = comVeiculados.length;
+document.getElementById("kpi-aderidos-pct").textContent = ((aderidos.length / total) * 100).toFixed(0) + "%";
+document.getElementById("kpi-veiculados-total").textContent = totalVeiculacoes;
 
 // ============== FILTRO CENTRAL DA TABELA ==============
 let tableSubsetNames = null;
@@ -601,7 +684,7 @@ function namesWhere(predicate) {
 }
 
 // ============== FUNIL (clicável) ==============
-const funilOrdem = ["Aberto","Agendado","Quente","Aderido"];
+const funilOrdem = ["Aberto","Quente","Agendado","Aderido"];
 const funilCount = countBy(DATA, "situacao");
 const funilMax = Math.max(...funilOrdem.map(s => funilCount[s] || 0));
 const funilEl = document.getElementById("funnel");
@@ -612,7 +695,7 @@ funilOrdem.forEach(s => {
   row.className = "funnel-row";
   row.innerHTML = `
     <div>${s}</div>
-    <div class="funnel-bar" style="width:${w}%; background:${COR[s]}">${n > 5 ? n : ""}</div>
+    <div class="funnel-bar" style="width:${Math.max(w, 4)}%; background:${COR[s]}">${n}</div>
     <div class="funnel-count">${n} <span style="color:#999;font-weight:400">(${((n/total)*100).toFixed(0)}%)</span></div>
   `;
   row.addEventListener("click", () => setTableSubset(namesWhere(d => d.situacao === s), `Situação: ${s}`));
@@ -624,8 +707,8 @@ document.getElementById("kpiTotal").addEventListener("click", () =>
   setTableSubset(DATA.map(d => d.nome), "Lista completa"));
 document.getElementById("kpiAderidos").addEventListener("click", () =>
   setTableSubset(namesWhere(d => d.situacao === "Aderido"), "Aderidos"));
-document.getElementById("kpiQuentes").addEventListener("click", () =>
-  setTableSubset(namesWhere(d => d.situacao === "Quente"), "Quentes"));
+document.getElementById("kpiVeiculados").addEventListener("click", () =>
+  setTableSubset(namesWhere(d => d.veiculados > 0), "Parlamentares com material veiculado"));
 
 // ============== CHART CONFIG ==============
 Chart.defaults.font.family = "'Segoe UI', sans-serif";
@@ -662,56 +745,45 @@ const barOpts = (onClickHandler = null) => ({
   plugins: { legend: { display: false } }
 });
 
-// ============== GRAVAÇÃO (donut) ==============
-const gravCount = countBy(aderidos, "gravacao");
-const gravLabels = ["Já gravou", "Ainda não"];
-const gravFilters = [
-  d => d.situacao === "Aderido" && d.gravacao === "Sim",
-  d => d.situacao === "Aderido" && d.gravacao === "Não"
-];
-new Chart(document.getElementById("chartGravacao"), {
-  type: "doughnut",
-  data: {
-    labels: gravLabels,
-    datasets: [{
-      data: [gravCount.Sim || 0, gravCount.Não || 0],
-      backgroundColor: ["#4CAF50", "#E5E7EB"],
-      borderWidth: 0
-    }]
-  },
-  options: donutOpts(true, (e, els) => {
-    if (!els.length) return;
-    const i = els[0].index;
-    setTableSubset(namesWhere(gravFilters[i]), `Aderidos — ${gravLabels[i]}`);
-  })
-});
+// ============== PROGRESS BARS: GRAVOU + VEICULOU ==============
+function renderProgress(elId, count, denom, baseLabel, onClick) {
+  const pct = denom > 0 ? (count / denom) * 100 : 0;
+  const el = document.getElementById(elId);
+  el.innerHTML = `
+    <div class="progress-base">${baseLabel}</div>
+    <div class="progress-bar">
+      <div class="progress-fill" style="width:${pct}%"></div>
+      <div class="progress-marker" style="left:calc(${pct}% - 1.5px)"></div>
+    </div>
+    <div class="progress-label">
+      <span class="frac">${count} de ${denom}</span>
+      <span class="percent">${pct.toFixed(0)}%</span>
+    </div>
+  `;
+  if (onClick) el.addEventListener("click", onClick);
+}
 
-// ============== VEICULAÇÃO (donut) ==============
-const veiculados = aderidos.filter(d => d.veiculados > 0).length;
-const naoVeiculados = aderidos.length - veiculados;
-const veicLabels = ["Já veiculados", "Ainda não"];
-const veicFilters = [
-  d => d.situacao === "Aderido" && d.veiculados > 0,
-  d => d.situacao === "Aderido" && d.veiculados === 0
-];
-new Chart(document.getElementById("chartVeiculacao"), {
-  type: "doughnut",
-  data: {
-    labels: veicLabels,
-    datasets: [{
-      data: [veiculados, naoVeiculados],
-      backgroundColor: ["#365F91", "#E5E7EB"],
-      borderWidth: 0
-    }]
-  },
-  options: donutOpts(true, (e, els) => {
-    if (!els.length) return;
-    const i = els[0].index;
-    setTableSubset(namesWhere(veicFilters[i]), `Aderidos — ${veicLabels[i]}`);
-  })
-});
+// Já gravou? (base = todos os aderidos)
+const aderidosGravaram = aderidos.filter(d => d.gravacao === "Sim");
+renderProgress(
+  "progressGravou",
+  aderidosGravaram.length,
+  aderidos.length,
+  `Base: ${aderidos.length} aderidos`,
+  () => setTableSubset(aderidosGravaram.map(d => d.nome), "Aderidos que já gravaram")
+);
 
-// ============== PIPELINE DOS ADERIDOS ==============
+// Já veiculamos? (base = aderidos que gravaram)
+const gravaramEVeicularam = aderidosGravaram.filter(d => d.veiculados > 0);
+renderProgress(
+  "progressVeiculou",
+  gravaramEVeicularam.length,
+  aderidosGravaram.length,
+  `Base: ${aderidosGravaram.length} que já gravaram`,
+  () => setTableSubset(gravaramEVeicularam.map(d => d.nome), "Aderidos que gravaram E já veicularam")
+);
+
+// ============== PIPELINE DOS ADERIDOS (pizza) ==============
 const pipelineStages = [
   { label: "Veiculado",                         color: "#1B5E20", filter: d => d.situacao === "Aderido" && d.veiculados > 0 },
   { label: "Gravado, aguardando veiculação",    color: "#66BB6A", filter: d => d.situacao === "Aderido" && d.gravacao === "Sim" && d.veiculados === 0 },
@@ -721,39 +793,36 @@ const pipelineStages = [
   { label: "Em realinhamento de momento",       color: "#9E9E9E", filter: d => d.situacao === "Aderido" && d.status === "Realinhando momento" }
 ];
 const pipelineCounts = pipelineStages.map(s => DATA.filter(s.filter).length);
+const pipelineTotal = pipelineCounts.reduce((a,b) => a+b, 0);
 new Chart(document.getElementById("chartPipeline"), {
-  type: "bar",
+  type: "doughnut",
   data: {
     labels: pipelineStages.map(s => s.label),
     datasets: [{
       data: pipelineCounts,
       backgroundColor: pipelineStages.map(s => s.color),
-      borderRadius: 6,
-      barPercentage: 0.75
+      borderWidth: 2,
+      borderColor: "#fff"
     }]
   },
   options: {
-    indexAxis: "y",
     responsive: true,
     maintainAspectRatio: false,
+    cutout: "55%",
     onHover: (e, els) => { e.native.target.style.cursor = els.length ? "pointer" : "default"; },
     onClick: (e, els) => {
       if (!els.length) return;
       const i = els[0].index;
       setTableSubset(namesWhere(pipelineStages[i].filter), `Pipeline: ${pipelineStages[i].label}`);
     },
-    scales: {
-      x: { beginAtZero: true, ticks: { precision: 0 } },
-      y: { ticks: { font: { size: 12 } } }
-    },
     plugins: {
-      legend: { display: false },
+      legend: {
+        position: "right",
+        labels: { padding: 12, boxWidth: 14, font: { size: 12 } }
+      },
       tooltip: {
         callbacks: {
-          label: (ctx) => {
-            const total = pipelineCounts.reduce((a,b) => a+b, 0);
-            return `${ctx.parsed.x} aderidos (${((ctx.parsed.x/total)*100).toFixed(1)}% — clique pra ver)`;
-          }
+          label: (ctx) => `${ctx.label}: ${ctx.parsed} aderidos (${((ctx.parsed/pipelineTotal)*100).toFixed(1)}%)`
         }
       }
     }
@@ -809,14 +878,141 @@ new Chart(document.getElementById("chartPartido"), {
     datasets: [{
       data: partidoCount.map(e => e[1]),
       backgroundColor: "#365F91",
+      borderRadius: 4,
+      barPercentage: 0.92,
+      categoryPercentage: 0.95
+    }]
+  },
+  options: {
+    indexAxis: "y",
+    responsive: true,
+    maintainAspectRatio: false,
+    onHover: (e, els) => { e.native.target.style.cursor = els.length ? "pointer" : "default"; },
+    onClick: (e, els) => {
+      if (!els.length) return;
+      const partido = partidoCount[els[0].index][0];
+      setTableSubset(namesWhere(d => d.situacao === "Aderido" && d.partido === partido), `Aderidos — Partido: ${partido}`);
+    },
+    scales: {
+      x: { beginAtZero: true, ticks: { precision: 0, font: { size: 10 } } },
+      y: { ticks: { font: { size: 10 }, autoSkip: false } }
+    },
+    plugins: { legend: { display: false } }
+  }
+});
+
+// ============== RANKING PARLAMENTARES ==============
+const ranking = DATA.filter(d => d.veiculados > 0).sort((a,b) => b.veiculados - a.veiculados);
+new Chart(document.getElementById("chartRankingParlamentares"), {
+  type: "bar",
+  data: {
+    labels: ranking.map(d => `${d.nome} (${d.uf}/${d.partido})`),
+    datasets: [{
+      data: ranking.map(d => d.veiculados),
+      backgroundColor: ranking.map((d, i) => i === 0 ? "#1B5E20" : i < 3 ? "#2E7D32" : i < 8 ? "#4CAF50" : "#81C784"),
       borderRadius: 4
     }]
   },
-  options: barOpts((e, els) => {
-    if (!els.length) return;
-    const partido = partidoCount[els[0].index][0];
-    setTableSubset(namesWhere(d => d.situacao === "Aderido" && d.partido === partido), `Aderidos — Partido: ${partido}`);
-  })
+  options: {
+    indexAxis: "y",
+    responsive: true,
+    maintainAspectRatio: false,
+    onHover: (e, els) => { e.native.target.style.cursor = els.length ? "pointer" : "default"; },
+    onClick: (e, els) => {
+      if (!els.length) return;
+      const dep = ranking[els[0].index];
+      setTableSubset([dep.nome], dep.nome);
+    },
+    scales: {
+      x: { beginAtZero: true, ticks: { precision: 0 } },
+      y: { ticks: { font: { size: 11 }, autoSkip: false } }
+    },
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: (ctx) => `${ctx.parsed.x} peças veiculadas` } }
+    }
+  }
+});
+
+// ============== RANKING ESTADOS - ADERIDOS (absoluto) ==============
+const ufAderidosCount = countBy(aderidos, "uf");
+const ufRankingAderidos = sortedEntries(ufAderidosCount).slice(0, 12);
+new Chart(document.getElementById("chartRankingUFAderidos"), {
+  type: "bar",
+  data: {
+    labels: ufRankingAderidos.map(e => `${e[0]} · ${UF_NOMES[e[0]]}`),
+    datasets: [{
+      data: ufRankingAderidos.map(e => e[1]),
+      backgroundColor: "#365F91",
+      borderRadius: 4
+    }]
+  },
+  options: {
+    indexAxis: "y",
+    responsive: true,
+    maintainAspectRatio: false,
+    onHover: (e, els) => { e.native.target.style.cursor = els.length ? "pointer" : "default"; },
+    onClick: (e, els) => {
+      if (!els.length) return;
+      const uf = ufRankingAderidos[els[0].index][0];
+      setTableSubset(namesWhere(d => d.situacao === "Aderido" && d.uf === uf), `Aderidos em ${UF_NOMES[uf]}`);
+    },
+    scales: {
+      x: { beginAtZero: true, ticks: { precision: 0, font: { size: 10 } } },
+      y: { ticks: { font: { size: 11 }, autoSkip: false } }
+    },
+    plugins: { legend: { display: false } }
+  }
+});
+
+// ============== RANKING ESTADOS - TAXA DE CONVERSÃO ==============
+const ufTotalCount = countBy(DATA, "uf");
+const ufConversao = Object.keys(ufTotalCount)
+  .map(uf => ({
+    uf,
+    total: ufTotalCount[uf],
+    aderidos: ufAderidosCount[uf] || 0,
+    pct: ((ufAderidosCount[uf] || 0) / ufTotalCount[uf]) * 100
+  }))
+  .filter(x => x.total >= 2)
+  .sort((a,b) => b.pct - a.pct)
+  .slice(0, 12);
+new Chart(document.getElementById("chartRankingUFConversao"), {
+  type: "bar",
+  data: {
+    labels: ufConversao.map(x => `${x.uf} · ${x.aderidos}/${x.total}`),
+    datasets: [{
+      data: ufConversao.map(x => x.pct),
+      backgroundColor: "#4CAF50",
+      borderRadius: 4
+    }]
+  },
+  options: {
+    indexAxis: "y",
+    responsive: true,
+    maintainAspectRatio: false,
+    onHover: (e, els) => { e.native.target.style.cursor = els.length ? "pointer" : "default"; },
+    onClick: (e, els) => {
+      if (!els.length) return;
+      const x = ufConversao[els[0].index];
+      setTableSubset(namesWhere(d => d.uf === x.uf), `Lista em ${UF_NOMES[x.uf]} (${x.aderidos}/${x.total})`);
+    },
+    scales: {
+      x: { beginAtZero: true, max: 100, ticks: { precision: 0, font: { size: 10 }, callback: v => v + "%" } },
+      y: { ticks: { font: { size: 11 }, autoSkip: false } }
+    },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: (ctx) => {
+            const x = ufConversao[ctx.dataIndex];
+            return `${x.aderidos} aderidos de ${x.total} = ${x.pct.toFixed(0)}%`;
+          }
+        }
+      }
+    }
+  }
 });
 
 // ============== MAPA DO BRASIL ==============
@@ -832,6 +1028,14 @@ const path = d3.geoPath().projection(projection);
 function getValuesByUF(mode) {
   const vals = {};
   Object.keys(UF_NOMES).forEach(uf => vals[uf] = 0);
+  if (mode === "conversao") {
+    Object.keys(UF_NOMES).forEach(uf => {
+      const totalUF = DATA.filter(d => d.uf === uf).length;
+      const aderUF = DATA.filter(d => d.uf === uf && d.situacao === "Aderido").length;
+      vals[uf] = totalUF > 0 ? Math.round((aderUF / totalUF) * 100) : 0;
+    });
+    return vals;
+  }
   let filtered;
   if (mode === "aderido") filtered = aderidos;
   else if (mode === "quente") filtered = quentes;
@@ -856,7 +1060,8 @@ function renderMap(mode) {
   const colorScales = {
     aderido: d3.scaleSequential(d3.interpolateGreens).domain([0, max]),
     quente: d3.scaleSequential(d3.interpolateOranges).domain([0, max]),
-    total: d3.scaleSequential(d3.interpolateBlues).domain([0, max])
+    total: d3.scaleSequential(d3.interpolateBlues).domain([0, max]),
+    conversao: d3.scaleSequential(d3.interpolatePurples).domain([0, 100])
   };
   const scaleColor = colorScales[mode];
 
@@ -869,14 +1074,38 @@ function renderMap(mode) {
       return v === 0 ? "#F0F0F0" : scaleColor(v);
     });
 
+  // State number labels (always visible)
+  const suffix = mode === "conversao" ? "%" : "";
+  const colorThreshold = mode === "conversao" ? 60 : max * 0.55;
+  svg.selectAll("text.uf-num")
+    .text(d => {
+      const uf = getUFFromFeature(d);
+      if (!uf) return "";
+      const v = vals[uf];
+      return v === 0 ? "" : v + suffix;
+    })
+    .attr("fill", d => {
+      const uf = getUFFromFeature(d);
+      const v = uf ? vals[uf] : 0;
+      return v > colorThreshold ? "#fff" : "#000";
+    });
+
   // Legend
-  const titles = { aderido: "Aderidos por UF", quente: "Quentes por UF", total: "Total da lista por UF" };
+  const titles = {
+    aderido: "Aderidos por UF",
+    quente: "Quentes por UF",
+    total: "Total da lista por UF",
+    conversao: "Taxa de conversão por UF"
+  };
   document.getElementById("legendTitle").textContent = titles[mode];
-  document.getElementById("scaleMax").textContent = max;
-  const grad = mode === "aderido" ? "linear-gradient(to right, #F7FCF5, #00441B)"
-            : mode === "quente"  ? "linear-gradient(to right, #FFF5EB, #7F2704)"
-            : "linear-gradient(to right, #F7FBFF, #08306B)";
-  document.getElementById("legendScale").style.background = grad;
+  document.getElementById("scaleMax").textContent = mode === "conversao" ? "100%" : max;
+  const grads = {
+    aderido:   "linear-gradient(to right, #F7FCF5, #00441B)",
+    quente:    "linear-gradient(to right, #FFF5EB, #7F2704)",
+    total:     "linear-gradient(to right, #F7FBFF, #08306B)",
+    conversao: "linear-gradient(to right, #FCFBFD, #3F007D)"
+  };
+  document.getElementById("legendScale").style.background = grads[mode];
 
   // List
   const ufList = document.getElementById("ufList");
@@ -886,7 +1115,7 @@ function renderMap(mode) {
     .sort((a,b) => b[1] - a[1])
     .slice(0, 12)
     .forEach(([uf, n]) => {
-      ufList.innerHTML += `<li><span>${uf} — ${UF_NOMES[uf]}</span><strong>${n}</strong></li>`;
+      ufList.innerHTML += `<li><span>${uf} — ${UF_NOMES[uf]}</span><strong>${n}${suffix}</strong></li>`;
     });
 }
 
@@ -904,17 +1133,17 @@ d3.json("https://raw.githubusercontent.com/codeforamerica/click_that_hood/master
       .on("mouseover", function(event, d) {
         d3.select(this).attr("stroke", "#1F3864").attr("stroke-width", 2);
         const uf = getUFFromFeature(d);
-        const allModes = {
-          aderido: getValuesByUF("aderido")[uf] || 0,
-          quente: getValuesByUF("quente")[uf] || 0,
-          total: getValuesByUF("total")[uf] || 0
-        };
+        const totalUF = getValuesByUF("total")[uf] || 0;
+        const aderUF = getValuesByUF("aderido")[uf] || 0;
+        const quenteUF = getValuesByUF("quente")[uf] || 0;
+        const convUF = totalUF > 0 ? Math.round((aderUF / totalUF) * 100) : 0;
         tooltip.style.display = "block";
         tooltip.innerHTML = `
           <h5>${UF_NOMES[uf] || d.properties.name} (${uf})</h5>
-          <div>Total na lista: <strong>${allModes.total}</strong></div>
-          <div>Aderidos: <strong style="color:#4CAF50">${allModes.aderido}</strong></div>
-          <div>Quentes: <strong style="color:#E36C0A">${allModes.quente}</strong></div>
+          <div>Total na lista: <strong>${totalUF}</strong></div>
+          <div>Aderidos: <strong style="color:#4CAF50">${aderUF}</strong></div>
+          <div>Quentes: <strong style="color:#E36C0A">${quenteUF}</strong></div>
+          <div>Conversão: <strong style="color:#6A1B9A">${convUF}%</strong></div>
         `;
       })
       .on("mousemove", function(event) {
@@ -941,6 +1170,21 @@ d3.json("https://raw.githubusercontent.com/codeforamerica/click_that_hood/master
         }
         setTableSubset(namesWhere(pred), label);
       });
+
+    // Adiciona números visíveis em cada estado
+    svg.selectAll("text.uf-num")
+      .data(geo.features)
+      .enter()
+      .append("text")
+      .attr("class", "uf-num")
+      .attr("text-anchor", "middle")
+      .attr("dominant-baseline", "middle")
+      .attr("font-size", 12)
+      .attr("font-weight", 700)
+      .attr("pointer-events", "none")
+      .attr("x", d => path.centroid(d)[0])
+      .attr("y", d => path.centroid(d)[1]);
+
     renderMap(currentMode);
   })
   .catch(err => {
