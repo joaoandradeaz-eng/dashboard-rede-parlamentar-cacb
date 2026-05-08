@@ -860,7 +860,10 @@ const barOpts = (onClickHandler = null) => ({
       offset: 4,
       color: "#1F2937",
       font: { weight: "700", size: 12 },
-      formatter: (v) => v
+      formatter: (v) => {
+        const n = typeof v === "number" ? v : (v && (v.x ?? v.y)) ?? 0;
+        return n > 0 ? n : "";
+      }
     }
   }
 });
@@ -958,7 +961,10 @@ new Chart(document.getElementById("chartPipeline"), {
         display: true,
         anchor: "end", align: "end", offset: 6,
         color: "#1F2937", font: { weight: "700", size: 14 },
-        formatter: (v) => v > 0 ? v : ""
+        formatter: (v) => {
+          const n = typeof v === "number" ? v : (v && (v.x ?? v.y)) ?? 0;
+          return n > 0 ? n : "";
+        }
       },
       tooltip: {
         callbacks: {
@@ -1044,7 +1050,10 @@ new Chart(document.getElementById("chartPartido"), {
         display: true,
         anchor: "end", align: "end", offset: 4,
         color: "#1F2937", font: { weight: "700", size: 11 },
-        formatter: (v) => v
+        formatter: (v) => {
+          const n = typeof v === "number" ? v : (v && (v.x ?? v.y)) ?? 0;
+          return n > 0 ? n : "";
+        }
       }
     }
   }
@@ -1082,7 +1091,10 @@ new Chart(document.getElementById("chartRankingParlamentares"), {
         display: true,
         anchor: "end", align: "end", offset: 4,
         color: "#1F2937", font: { weight: "700", size: 12 },
-        formatter: (v) => v > 0 ? v : ""
+        formatter: (v) => {
+          const n = typeof v === "number" ? v : (v && (v.x ?? v.y)) ?? 0;
+          return n > 0 ? n : "";
+        }
       },
       tooltip: { callbacks: { label: (ctx) => `${ctx.parsed.x} peças veiculadas` } }
     }
@@ -1122,7 +1134,10 @@ new Chart(document.getElementById("chartRankingUFAderidos"), {
         display: true,
         anchor: "end", align: "end", offset: 4,
         color: "#1F2937", font: { weight: "700", size: 12 },
-        formatter: (v) => v
+        formatter: (v) => {
+          const n = typeof v === "number" ? v : (v && (v.x ?? v.y)) ?? 0;
+          return n > 0 ? n : "";
+        }
       }
     }
   }
