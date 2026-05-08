@@ -33,28 +33,23 @@
   .container { max-width: 1400px; margin: 0 auto; }
 
   header {
-    padding: 12px 0 8px 0;
+    padding: 16px 0 24px 0;
     margin-bottom: 8px;
   }
   header h1 {
-    font-size: 56px;
+    font-size: 72px;
     font-weight: 800;
-    color: #000;
-    letter-spacing: -2px;
-    margin-bottom: 12px;
+    color: #1F3864;
+    letter-spacing: -2.5px;
+    margin-bottom: 14px;
     line-height: 1;
   }
   header .subtitle {
-    font-size: 20px;
+    font-size: 22px;
     color: var(--text-muted);
     font-weight: 400;
   }
-  .header-divider {
-    height: 3px;
-    background: #000;
-    margin: 28px 0 0 0;
-    border: none;
-  }
+  .header-divider { display: none; }
 
   .kpi-grid {
     display: grid;
@@ -77,21 +72,6 @@
     justify-content: center;
     position: relative;
   }
-  .kpi-card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: var(--accent, #1F3864);
-  }
-  .kpi-card[data-kind="total"] { --accent: linear-gradient(90deg, #1F3864 0%, #4F81BD 100%); }
-  .kpi-card[data-kind="aderidos"] { --accent: linear-gradient(90deg, #047857 0%, #10B981 100%); }
-  .kpi-card[data-kind="veiculados"] { --accent: linear-gradient(90deg, #1E3A8A 0%, #3B82F6 100%); }
-  .kpi-card[data-kind="total"]::before { background: linear-gradient(90deg, #1F3864 0%, #4F81BD 100%); }
-  .kpi-card[data-kind="aderidos"]::before { background: linear-gradient(90deg, #047857 0%, #10B981 100%); }
-  .kpi-card[data-kind="veiculados"]::before { background: linear-gradient(90deg, #1E3A8A 0%, #3B82F6 100%); }
   .kpi-card:last-child { border-right: none; }
   .kpi-card:hover { background: rgba(255,255,255,0.6); }
   .kpi-card .label {
