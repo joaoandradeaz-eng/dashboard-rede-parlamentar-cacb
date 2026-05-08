@@ -770,7 +770,7 @@ new Chart(document.getElementById("chartFunnel"), {
       datalabels: {
         anchor: "end", align: "end", offset: 4,
         color: "#1F2937", font: { weight: "700", size: 14 },
-        formatter: (v) => v
+        formatter: (v) => v > 0 ? v : ""
       },
       tooltip: {
         callbacks: {
@@ -809,7 +809,7 @@ const donutOpts = (showLegend = true, onClickHandler = null) => ({
   plugins: {
     legend: { display: showLegend, position: "bottom", labels: { padding: 14, boxWidth: 14, font: { size: 13 } } },
     datalabels: {
-      display: (ctx) => ctx.dataset.data[ctx.dataIndex] > 0,
+      display: true,
       color: "#fff",
       font: { weight: "700", size: 16 },
       formatter: (v) => v
@@ -839,7 +839,7 @@ const barOpts = (onClickHandler = null) => ({
   plugins: {
     legend: { display: false },
     datalabels: {
-      display: (ctx) => ctx.dataset.data[ctx.dataIndex] > 0,
+      display: true,
       anchor: "end",
       align: "end",
       offset: 4,
@@ -940,10 +940,10 @@ new Chart(document.getElementById("chartPipeline"), {
     plugins: {
       legend: { display: false },
       datalabels: {
-        display: (ctx) => ctx.dataset.data[ctx.dataIndex] > 0,
+        display: true,
         anchor: "end", align: "end", offset: 6,
         color: "#1F2937", font: { weight: "700", size: 14 },
-        formatter: (v) => v
+        formatter: (v) => v > 0 ? v : ""
       },
       tooltip: {
         callbacks: {
@@ -1026,7 +1026,7 @@ new Chart(document.getElementById("chartPartido"), {
     plugins: {
       legend: { display: false },
       datalabels: {
-        display: (ctx) => ctx.dataset.data[ctx.dataIndex] > 0,
+        display: true,
         anchor: "end", align: "end", offset: 4,
         color: "#1F2937", font: { weight: "700", size: 11 },
         formatter: (v) => v
@@ -1067,7 +1067,7 @@ new Chart(document.getElementById("chartRankingParlamentares"), {
         display: true,
         anchor: "end", align: "end", offset: 4,
         color: "#1F2937", font: { weight: "700", size: 12 },
-        formatter: (v) => v
+        formatter: (v) => v > 0 ? v : ""
       },
       tooltip: { callbacks: { label: (ctx) => `${ctx.parsed.x} peças veiculadas` } }
     }
