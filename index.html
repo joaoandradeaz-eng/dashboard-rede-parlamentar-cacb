@@ -757,11 +757,7 @@ new Chart(document.getElementById("chartFunnel"), {
     scales: {
       x: {
         grid: { display: false },
-        ticks: {
-          font: { size: 12, weight: "700" },
-          color: (ctx) => ctx.tick && ctx.index !== undefined ? funnelData[ctx.index].color : "#1F2937",
-          autoSkip: false
-        }
+        ticks: { font: { size: 12, weight: "700" }, color: "#1F2937", autoSkip: false }
       },
       y: {
         beginAtZero: true,
