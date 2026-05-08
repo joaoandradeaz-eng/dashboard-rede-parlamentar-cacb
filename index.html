@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rede Parlamentar CACB — Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <style>
   :root {
@@ -809,7 +808,53 @@ document.getElementById("kpiVeiculados").addEventListener("click", () =>
   setTableSubset(namesWhere(d => d.veiculados > 0), "Parlamentares com material veiculado"));
 
 // ============== CHART CONFIG ==============
-Chart.register(ChartDataLabels);
+// Custom datalabels plugin (substitui chartjs-plugin-datalabels que tem bug com Chart.js v4.4)
+const SimpleDatalabels = {
+  id: "simpleDatalabels",
+  afterDatasetsDraw(chart) {
+    const opts = chart.options.plugins && chart.options.plugins.datalabels;
+    if (!opts || opts.display === false) return;
+    const ctx = chart.ctx;
+    chart.data.datasets.forEach((ds, dsIdx) => {
+      const meta = chart.getDatasetMeta(dsIdx);
+      if (!meta || meta.hidden) return;
+      meta.data.forEach((el, idx) => {
+        const raw = ds.data[idx];
+        const num = typeof raw === "number" ? raw : (raw && (raw.x ?? raw.y)) ?? 0;
+        const text = opts.formatter ? opts.formatter(num, { dataIndex: idx, datasetIndex: dsIdx, chart, dataset: ds }) : String(num);
+        if (text === "" || text == null) return;
+        const font = opts.font || {};
+        const weight = font.weight || "700";
+        const size = font.size || 12;
+        const family = (Chart.defaults.font && Chart.defaults.font.family) || "sans-serif";
+        ctx.save();
+        ctx.font = `${weight} ${size}px ${family}`;
+        ctx.fillStyle = opts.color || "#1F2937";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        const offset = opts.offset != null ? opts.offset : 6;
+        let x, y;
+        if (chart.config.type === "doughnut" || chart.config.type === "pie") {
+          const pos = el.tooltipPosition ? el.tooltipPosition() : { x: el.x, y: el.y };
+          x = pos.x; y = pos.y;
+        } else if (meta.controller && meta.controller.options && meta.controller.options.indexAxis === "y") {
+          x = el.x + offset + ctx.measureText(text).width / 2;
+          y = el.y;
+          ctx.textAlign = "left";
+          ctx.fillText(text, el.x + offset, y);
+          ctx.restore();
+          return;
+        } else {
+          x = el.x;
+          y = el.y - offset - size / 2;
+        }
+        ctx.fillText(text, x, y);
+        ctx.restore();
+      });
+    });
+  }
+};
+Chart.register(SimpleDatalabels);
 Chart.defaults.font.family = "'Segoe UI', sans-serif";
 Chart.defaults.font.size = 12;
 Chart.defaults.color = "#374151";
