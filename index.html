@@ -775,7 +775,10 @@ new Chart(document.getElementById("chartFunnel"), {
         display: true,
         anchor: "end", align: "end", offset: 6,
         color: "#1F2937", font: { weight: "700", size: 16 },
-        formatter: (v) => v > 0 ? v : ""
+        formatter: (v) => {
+          const n = typeof v === "number" ? v : (v && (v.y ?? v.x)) ?? 0;
+          return n > 0 ? n : "";
+        }
       },
       tooltip: {
         enabled: true,
