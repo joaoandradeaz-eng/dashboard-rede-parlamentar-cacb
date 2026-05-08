@@ -819,9 +819,17 @@ const SimpleDatalabels = {
       const meta = chart.getDatasetMeta(dsIdx);
       if (!meta || meta.hidden) return;
       meta.data.forEach((el, idx) => {
+        if (!el) return;
         const raw = ds.data[idx];
         const num = typeof raw === "number" ? raw : (raw && (raw.x ?? raw.y)) ?? 0;
-        const text = opts.formatter ? opts.formatter(num, { dataIndex: idx, datasetIndex: dsIdx, chart, dataset: ds }) : String(num);
+        let text;
+        try {
+          text = typeof opts.formatter === "function"
+            ? opts.formatter(num, { dataIndex: idx, datasetIndex: dsIdx, chart, dataset: ds })
+            : String(num);
+        } catch (e) {
+          text = String(num);
+        }
         if (text === "" || text == null) return;
         const font = opts.font || {};
         const weight = font.weight || "700";
