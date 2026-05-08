@@ -58,62 +58,89 @@
   .kpi-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    background: white;
-    border-bottom: 3px solid #000;
+    background: linear-gradient(135deg, #FFFFFF 0%, #F1F5FA 100%);
+    border-radius: 14px;
+    border: 1px solid #DBE3EC;
+    box-shadow: 0 4px 14px rgba(31, 56, 100, 0.08);
     margin-bottom: 32px;
+    overflow: hidden;
   }
   .kpi-card {
-    background: white;
-    padding: 36px 28px;
-    border-right: 1.5px solid #000;
+    padding: 38px 32px;
+    border-right: 1px solid #DBE3EC;
     cursor: pointer;
-    transition: background 0.15s;
-    min-height: 180px;
+    transition: background 0.15s, transform 0.15s;
+    min-height: 200px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    position: relative;
   }
+  .kpi-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--accent, #1F3864);
+  }
+  .kpi-card[data-kind="total"] { --accent: linear-gradient(90deg, #1F3864 0%, #4F81BD 100%); }
+  .kpi-card[data-kind="aderidos"] { --accent: linear-gradient(90deg, #047857 0%, #10B981 100%); }
+  .kpi-card[data-kind="veiculados"] { --accent: linear-gradient(90deg, #1E3A8A 0%, #3B82F6 100%); }
+  .kpi-card[data-kind="total"]::before { background: linear-gradient(90deg, #1F3864 0%, #4F81BD 100%); }
+  .kpi-card[data-kind="aderidos"]::before { background: linear-gradient(90deg, #047857 0%, #10B981 100%); }
+  .kpi-card[data-kind="veiculados"]::before { background: linear-gradient(90deg, #1E3A8A 0%, #3B82F6 100%); }
   .kpi-card:last-child { border-right: none; }
-  .kpi-card:hover { background: #FAFAFA; }
+  .kpi-card:hover { background: rgba(255,255,255,0.6); }
   .kpi-card .label {
-    font-size: 13px;
+    font-size: 12px;
     text-transform: uppercase;
-    letter-spacing: 0.8px;
-    color: #000;
-    font-weight: 600;
-    margin-bottom: 14px;
+    letter-spacing: 1.5px;
+    color: #64748B;
+    font-weight: 700;
+    margin-bottom: 16px;
   }
   .kpi-card .value {
-    font-size: 56px;
-    font-weight: 300;
+    font-size: 64px;
+    font-weight: 700;
     line-height: 1;
-    color: #000;
-    letter-spacing: -2px;
+    letter-spacing: -2.5px;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .kpi-card[data-kind="total"] .value {
+    background-image: linear-gradient(135deg, #1F3864 0%, #4F81BD 100%);
+  }
+  .kpi-card[data-kind="aderidos"] .value {
+    background-image: linear-gradient(135deg, #047857 0%, #10B981 100%);
+  }
+  .kpi-card[data-kind="veiculados"] .value {
+    background-image: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%);
   }
   .kpi-card .meta {
     font-size: 13px;
     color: var(--text-muted);
-    margin-top: 12px;
-    font-weight: 400;
+    margin-top: 14px;
+    font-weight: 500;
   }
-  .kpi-card .meta strong { color: #000; font-weight: 600; }
+  .kpi-card .meta strong { color: #1F3864; font-weight: 700; }
 
   .section-title {
     font-size: 22px;
     font-weight: 700;
     color: white;
     margin: 40px 0 24px 0;
-    padding: 18px 28px;
+    padding: 22px 32px;
     background: linear-gradient(90deg, #1F3864 0%, #365F91 100%);
     border-radius: 10px;
     letter-spacing: 1.2px;
     text-transform: uppercase;
-    box-shadow: 0 2px 12px rgba(31, 56, 100, 0.18);
-    border-left: 5px solid #FFC857;
+    box-shadow: 0 4px 16px rgba(31, 56, 100, 0.22);
   }
   .section-title.section-geo {
     background: linear-gradient(90deg, #2E5E91 0%, #5B89BF 100%);
-    border-left-color: #94C5F8;
   }
   .aderidos-block {
     background: linear-gradient(180deg, #F1F5FA 0%, #F8FAFC 100%);
@@ -189,68 +216,23 @@
   .progress-label .percent { font-weight: 700; font-size: 28px; color: #000; line-height: 1; }
   .progress-label .frac { color: var(--text-muted); }
 
-  /* Funil moderno */
-  .funnel-modern {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 14px;
-    padding: 28px 20px 12px 20px;
+  /* Funil SVG */
+  .funnel-svg-wrap {
+    padding: 12px 0 4px 0;
   }
-  .funnel-row {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  .funnel-svg-wrap svg {
     width: 100%;
+    max-width: 1000px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
   }
-  .funnel-shape {
-    height: 86px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 56px;
-    color: white;
-    cursor: pointer;
+  .funnel-band {
     transition: filter 0.15s, transform 0.15s;
-    box-shadow: 0 6px 14px rgba(0,0,0,0.10);
+    transform-origin: center;
   }
-  .funnel-shape:hover { filter: brightness(1.08); transform: scale(1.005); }
-  .funnel-shape .stage-name {
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: 2.5px;
-    text-transform: uppercase;
-  }
-  .funnel-shape .stage-stats { display: flex; align-items: baseline; gap: 12px; }
-  .funnel-shape .stage-count { font-size: 38px; font-weight: 700; line-height: 1; }
-  .funnel-shape .stage-pct { font-size: 16px; opacity: 0.92; font-weight: 500; }
-  .funnel-row[data-stage="Aberto"] .funnel-shape {
-    background: linear-gradient(135deg, #94A3B8 0%, #475569 100%);
-    width: 96%;
-    clip-path: polygon(0% 0%, 100% 0%, 96% 100%, 4% 100%);
-  }
-  .funnel-row[data-stage="Quente"] .funnel-shape {
-    background: linear-gradient(135deg, #F59E0B 0%, #B45309 100%);
-    width: 80%;
-    clip-path: polygon(4% 0%, 96% 0%, 91% 100%, 9% 100%);
-  }
-  .funnel-row[data-stage="Agendado"] .funnel-shape {
-    background: linear-gradient(135deg, #4F81BD 0%, #1E3A8A 100%);
-    width: 64%;
-    clip-path: polygon(9% 0%, 91% 0%, 86% 100%, 14% 100%);
-  }
-  .funnel-row[data-stage="Aderido"] .funnel-shape {
-    background: linear-gradient(135deg, #10B981 0%, #064E3B 100%);
-    width: 50%;
-    clip-path: polygon(14% 0%, 86% 0%, 81% 100%, 19% 100%);
-  }
-  .funnel-desc {
-    margin-top: 8px;
-    color: var(--text-muted);
-    font-size: 13px;
-    text-align: center;
-    font-style: italic;
-    max-width: 80%;
+  .funnel-band:hover {
+    filter: brightness(1.12) drop-shadow(0 4px 12px rgba(0,0,0,0.18));
   }
 
   /* Map */
@@ -423,17 +405,17 @@
 
   <!-- KPIs -->
   <section class="kpi-grid">
-    <div class="kpi-card" id="kpiTotal">
+    <div class="kpi-card" id="kpiTotal" data-kind="total">
       <div class="label">Lista de ataque</div>
       <div class="value" id="kpi-total">—</div>
       <div class="meta">Parlamentares mapeados</div>
     </div>
-    <div class="kpi-card" id="kpiAderidos">
+    <div class="kpi-card" id="kpiAderidos" data-kind="aderidos">
       <div class="label">Aderidos</div>
       <div class="value" id="kpi-aderidos">—</div>
       <div class="meta"><strong id="kpi-aderidos-pct">—</strong> da lista total</div>
     </div>
-    <div class="kpi-card" id="kpiVeiculados">
+    <div class="kpi-card" id="kpiVeiculados" data-kind="veiculados">
       <div class="label">Já veiculados</div>
       <div class="value" id="kpi-veiculados">—</div>
       <div class="meta"><strong id="kpi-veiculados-total">—</strong> peças no ar</div>
@@ -442,8 +424,8 @@
 
   <!-- Funil -->
   <section class="chart-card">
-    <h3>Funil de situação</h3>
-    <div class="funnel-modern" id="funnel"></div>
+    <h3>Funil de conversão</h3>
+    <div class="funnel-svg-wrap" id="funnel"></div>
   </section>
 
   <h2 class="section-title">Aderidos — Detalhamento</h2>
@@ -691,10 +673,10 @@ const UF_NOMES = {AC:"Acre",AL:"Alagoas",AM:"Amazonas",AP:"Amapá",BA:"Bahia",CE
 const COR = {Aderido:"#10B981", Quente:"#F59E0B", Agendado:"#4F81BD", Aberto:"#94A3B8"};
 const COR_STATUS = {
   "Rodando":                       "#10B981",
-  "Agenda":                        "#D97706",
-  "Temas":                         "#FCD34D",
-  "Gravado, ainda não veiculado":  "#3B82F6",
-  "Realinhamento":                 "#DC2626",
+  "Agenda":                        "#1E40AF",
+  "Temas":                         "#3B82F6",
+  "Gravado, ainda não veiculado":  "#60A5FA",
+  "Realinhamento":                 "#93C5FD",
   "Pendência Parlamentar":         "#94A3B8"
 };
 
@@ -752,36 +734,71 @@ function namesWhere(predicate) {
   return DATA.filter(predicate).map(d => d.nome);
 }
 
-// ============== FUNIL MODERNO (clicável) ==============
-const funilStages = [
-  { key: "Aberto",   desc: "Mapeados — contato ainda pendente" },
-  { key: "Quente",   desc: "Em prospecção — sinal positivo" },
-  { key: "Agendado", desc: "Reunião confirmada na agenda" },
-  { key: "Aderido",  desc: "Compromisso firmado — pipeline ativo" }
-];
+// ============== FUNIL SVG (6 estágios, clicável) ==============
 const funilCount = countBy(DATA, "situacao");
-const funilEl = document.getElementById("funnel");
-funilStages.forEach(stage => {
-  const n = funilCount[stage.key] || 0;
-  const pct = ((n / total) * 100).toFixed(0);
-  const row = document.createElement("div");
-  row.className = "funnel-row";
-  row.dataset.stage = stage.key;
-  row.innerHTML = `
-    <div class="funnel-shape">
-      <span class="stage-name">${stage.key}</span>
-      <span class="stage-stats">
-        <span class="stage-count">${n}</span>
-        <span class="stage-pct">${pct}% da lista</span>
-      </span>
-    </div>
-    <div class="funnel-desc">${stage.desc}</div>
-  `;
-  row.querySelector(".funnel-shape").addEventListener("click", () =>
-    setTableSubset(namesWhere(d => d.situacao === stage.key), `Situação: ${stage.key}`)
-  );
-  funilEl.appendChild(row);
-});
+const aderidosGravaramN = aderidos.filter(d => d.gravacao === "Sim").length;
+const veiculadosN = DATA.filter(d => d.veiculados > 0).length;
+
+const funnelData = [
+  { key:"Aberto",     label:"ABERTO",     desc:"Prospecção fria",                count: funilCount.Aberto || 0,    color:["#94A3B8","#475569"], filter: d => d.situacao === "Aberto"   },
+  { key:"Quente",     label:"QUENTE",     desc:"Prospecção quente",              count: funilCount.Quente || 0,    color:["#FBBF24","#B45309"], filter: d => d.situacao === "Quente"   },
+  { key:"Agendado",   label:"AGENDADO",   desc:"Reunião confirmada na agenda",   count: funilCount.Agendado || 0,  color:["#60A5FA","#1E40AF"], filter: d => d.situacao === "Agendado" },
+  { key:"Aderido",    label:"ADERIDOS",   desc:"Compromisso firmado",            count: funilCount.Aderido || 0,   color:["#34D399","#047857"], filter: d => d.situacao === "Aderido"  },
+  { key:"Gravacao",   label:"GRAVAÇÃO",   desc:"Aderidos que já gravaram",       count: aderidosGravaramN,         color:["#10B981","#065F46"], filter: d => d.situacao === "Aderido" && d.gravacao === "Sim" },
+  { key:"Veiculados", label:"VEICULADOS", desc:"Material já veiculado",          count: veiculadosN,               color:["#047857","#022C22"], filter: d => d.veiculados > 0 }
+];
+
+(function renderFunnel() {
+  const VB_W = 1000, VB_H = 700;
+  const stageH = 110;
+  const startY = 14;
+  const insetStep = 60;
+
+  let defs = "";
+  let bands = "";
+  funnelData.forEach((s, i) => {
+    const yTop = startY + i * stageH;
+    const yBot = yTop + stageH;
+    const insetTop = 30 + i * insetStep;
+    const insetBot = 30 + (i+1) * insetStep;
+    const xTopL = insetTop, xTopR = VB_W - insetTop;
+    const xBotL = insetBot, xBotR = VB_W - insetBot;
+
+    defs += `
+      <linearGradient id="g-${s.key}" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="${s.color[0]}"/>
+        <stop offset="100%" stop-color="${s.color[1]}"/>
+      </linearGradient>`;
+
+    const pct = ((s.count / total) * 100).toFixed(0);
+    bands += `
+      <g class="funnel-band" data-idx="${i}">
+        <polygon points="${xTopL},${yTop} ${xTopR},${yTop} ${xBotR},${yBot} ${xBotL},${yBot}"
+                 fill="url(#g-${s.key})"/>
+        <text x="${VB_W/2}" y="${yTop + 32}" text-anchor="middle" fill="#fff"
+              font-size="13" font-weight="700" letter-spacing="3">${s.label}</text>
+        <text x="${VB_W/2}" y="${yTop + 66}" text-anchor="middle" fill="#fff"
+              font-size="26" font-weight="700">${s.count} <tspan font-size="14" font-weight="500" opacity="0.85">· ${pct}%</tspan></text>
+        <text x="${VB_W/2}" y="${yTop + 92}" text-anchor="middle" fill="rgba(255,255,255,0.92)"
+              font-size="11" font-style="italic">${s.desc}</text>
+      </g>`;
+  });
+
+  document.getElementById("funnel").innerHTML = `
+    <svg viewBox="0 0 ${VB_W} ${VB_H}" preserveAspectRatio="xMidYMid meet">
+      <defs>${defs}</defs>
+      ${bands}
+    </svg>`;
+
+  document.querySelectorAll(".funnel-band").forEach(band => {
+    band.style.cursor = "pointer";
+    band.addEventListener("click", () => {
+      const i = parseInt(band.dataset.idx);
+      const s = funnelData[i];
+      setTableSubset(namesWhere(s.filter), `${s.label} — ${s.desc}`);
+    });
+  });
+})();
 
 // ============== KPIs CLICÁVEIS ==============
 document.getElementById("kpiTotal").addEventListener("click", () =>
@@ -898,45 +915,54 @@ const pipelineStages = [
 const pipelineCounts = pipelineStages.map(s => DATA.filter(d => d.situacao === "Aderido" && d.status === s.status).length);
 const pipelineColors = pipelineStages.map(s => COR_STATUS[s.status]);
 const pipelineTotal = pipelineCounts.reduce((a,b) => a+b, 0);
+// Sort pipeline stages by count desc for nicer bar chart
+const pipelineSortedIdx = pipelineCounts.map((_,i) => i).sort((a,b) => pipelineCounts[b] - pipelineCounts[a]);
+const pipelineSorted = {
+  labels: pipelineSortedIdx.map(i => pipelineStages[i].label),
+  data: pipelineSortedIdx.map(i => pipelineCounts[i]),
+  colors: pipelineSortedIdx.map(i => pipelineColors[i]),
+  stages: pipelineSortedIdx.map(i => pipelineStages[i])
+};
 new Chart(document.getElementById("chartPipeline"), {
-  type: "doughnut",
+  type: "bar",
   data: {
-    labels: pipelineStages.map(s => s.label),
+    labels: pipelineSorted.labels,
     datasets: [{
-      data: pipelineCounts,
-      backgroundColor: pipelineColors,
-      borderWidth: 3,
-      borderColor: "#fff",
-      hoverOffset: 8
+      data: pipelineSorted.data,
+      backgroundColor: pipelineSorted.colors,
+      borderRadius: 6,
+      barPercentage: 0.85,
+      categoryPercentage: 0.92
     }]
   },
   options: {
+    indexAxis: "y",
     responsive: true,
     maintainAspectRatio: false,
-    cutout: "48%",
     onHover: (e, els) => { e.native.target.style.cursor = els.length ? "pointer" : "default"; },
     onClick: (e, els) => {
       if (!els.length) return;
-      const i = els[0].index;
+      const stage = pipelineSorted.stages[els[0].index];
       setTableSubset(
-        namesWhere(d => d.situacao === "Aderido" && d.status === pipelineStages[i].status),
-        `Pipeline: ${pipelineStages[i].label}`
+        namesWhere(d => d.situacao === "Aderido" && d.status === stage.status),
+        `Pipeline: ${stage.label}`
       );
     },
+    scales: {
+      x: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: "#E5E7EB" } },
+      y: { ticks: { font: { size: 13, weight: "600" }, autoSkip: false }, grid: { display: false } }
+    },
     plugins: {
-      legend: {
-        position: "right",
-        labels: { padding: 14, boxWidth: 14, font: { size: 13 } }
-      },
+      legend: { display: false },
       datalabels: {
         display: (ctx) => ctx.dataset.data[ctx.dataIndex] > 0,
-        color: (ctx) => pipelineStages[ctx.dataIndex].status === "Temas" ? "#1F2937" : "#fff",
-        font: { weight: "700", size: 16 },
+        anchor: "end", align: "end", offset: 6,
+        color: "#1F2937", font: { weight: "700", size: 14 },
         formatter: (v) => v
       },
       tooltip: {
         callbacks: {
-          label: (ctx) => `${ctx.label}: ${ctx.parsed} aderidos (${((ctx.parsed/pipelineTotal)*100).toFixed(1)}%)`
+          label: (ctx) => `${ctx.parsed.x} aderidos (${((ctx.parsed.x/pipelineTotal)*100).toFixed(1)}%)`
         }
       }
     }
@@ -1032,7 +1058,7 @@ new Chart(document.getElementById("chartRankingParlamentares"), {
     labels: ranking.map(d => `${d.nome} (${d.uf}/${d.partido})`),
     datasets: [{
       data: ranking.map(d => d.veiculados),
-      backgroundColor: ranking.map((d, i) => i === 0 ? "#1B5E20" : i < 3 ? "#2E7D32" : i < 8 ? "#4CAF50" : "#81C784"),
+      backgroundColor: ranking.map((d, i) => i === 0 ? "#1F3864" : i < 3 ? "#2E5E91" : i < 8 ? "#4F81BD" : "#7C9EB2"),
       borderRadius: 4
     }]
   },
