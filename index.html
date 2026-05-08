@@ -1426,6 +1426,18 @@ document.querySelectorAll("th[data-sort]").forEach(th => {
 });
 renderTable();
 
+// Defensive: re-render charts depois que o layout estabiliza pra corrigir glitch de render inicial
+function refreshAllCharts() {
+  document.querySelectorAll("canvas").forEach(c => {
+    const ch = Chart.getChart(c);
+    if (ch) { ch.resize(); ch.update("none"); }
+  });
+}
+window.addEventListener("load", () => {
+  refreshAllCharts();
+  setTimeout(refreshAllCharts, 100);
+});
+
 </script>
 </body>
 </html>
