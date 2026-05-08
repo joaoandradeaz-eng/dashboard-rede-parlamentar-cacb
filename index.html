@@ -1185,7 +1185,10 @@ new Chart(document.getElementById("chartRankingUFConversao"), {
         display: true,
         anchor: "end", align: "end", offset: 4,
         color: "#1F2937", font: { weight: "700", size: 12 },
-        formatter: (v) => v.toFixed(0) + "%"
+        formatter: (v) => {
+          const n = typeof v === "number" ? v : (v && (v.x ?? v.y)) ?? 0;
+          return n.toFixed(0) + "%";
+        }
       },
       tooltip: {
         callbacks: {
