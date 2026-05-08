@@ -732,6 +732,12 @@ const funnelData = [
   { key:"Veiculados", label:"VEICULADOS", desc:"Material já veiculado",          count: veiculadosN,               color:"#047857", filter: d => d.veiculados > 0 }
 ];
 
+// WeakMap para opcoes de datalabels (declarado aqui pois e usado logo apos cada chart;
+// o plugin SimpleDatalabels que le deste WeakMap esta registrado mais abaixo, mas
+// como charts so renderizam apos o script terminar, a ordem do register nao importa).
+const _chartLabels = new WeakMap();
+function setChartLabels(chart, labelOpts) { _chartLabels.set(chart, labelOpts); chart.update(); }
+
 const cFunnel = new Chart(document.getElementById("chartFunnel"), {
   type: "bar",
   data: {
@@ -804,12 +810,9 @@ document.getElementById("kpiVeiculados").addEventListener("click", () =>
   setTableSubset(namesWhere(d => d.veiculados > 0), "Parlamentares com material veiculado"));
 
 // ============== CHART CONFIG ==============
-// Custom datalabels plugin. Opcoes ficam num WeakMap externo para que o
-// scriptable-resolver do Chart.js v4 nao execute as funcoes formatter()
-// durante o merge de opcoes (bug em que Chart.js chamava formatter(undefined)
-// e substituia a funcao pelo resultado da execucao convertido em string).
-const _chartLabels = new WeakMap();
-function setChartLabels(chart, labelOpts) { _chartLabels.set(chart, labelOpts); chart.update(); }
+// Plugin que desenha datalabels lendo opcoes de _chartLabels (WeakMap declarado
+// antes do primeiro chart). Mantido fora de chart.options para evitar que o
+// scriptable resolver do Chart.js v4 execute formatter() prematuramente.
 const SimpleDatalabels = {
   id: "simpleDatalabels",
   afterDatasetsDraw(chart) {
